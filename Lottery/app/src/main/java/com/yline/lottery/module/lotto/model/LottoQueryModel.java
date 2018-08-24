@@ -9,7 +9,7 @@ public class LottoQueryModel implements Serializable {
 	private String lottery_id; // 彩票种类 id
 	private String lottery_name; // "双色球",
 	private String lottery_res; // "03,08,11,14,18,23,16",
-	private String lottery_no; // 18028 	开奖期号
+	private String lottery_no; //  开奖期号 18028
 	private String lottery_date; // 	开奖日期 "2018-03-13",
 	private String lottery_exdate; // 兑奖截止日期 "2018-05-11",
 	private String lottery_sale_amount; // 	本期销售额，可能为空 "352,015,830",

@@ -52,7 +52,7 @@ public class OkHttpManager {
 	 * 开奖结果查询
 	 *
 	 * @param lotteryId 彩票种类 id
-	 * @param lotteryNo 彩票号码
+	 * @param lotteryNo 彩票期号，默认最新一期
 	 */
 	public static void lottoQuery(String lotteryId, String lotteryNo, OnJsonCallback<LottoQueryModel> callback) {
 		String httpUrl = "http://apis.juhe.cn/lottery/query";

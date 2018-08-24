@@ -1,5 +1,7 @@
 package com.yline.lottery.http.adapter;
 
+import android.text.TextUtils;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.yline.http.OkHttpUtils;
@@ -104,7 +106,10 @@ public class LottoHttpAdapter implements OnHttpAdapter {
 		buildParamBuilder(multiBuilder);
 		if (null != params) {
 			for (String key : params.keySet()) {
-				multiBuilder.addFormDataPart(key, params.get(key));
+				String value = params.get(key);
+				if (!TextUtils.isEmpty(value)) {
+					multiBuilder.addFormDataPart(key, value);
+				}
 			}
 		}
 		requestBuilder.post(multiBuilder.build());
