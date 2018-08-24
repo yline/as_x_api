@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.List;
 
 public class LottoTypeModel implements Serializable {
+	public static final int TYPE_WELFARE = 1;
 	private static final long serialVersionUID = -8480510311384257690L;
 	
 	private String lottery_id; // 彩票ID
 	private String lottery_name; // 	彩票名称
-	private String lottery_type_id; // 彩票类型，1:福利彩票 2:体育彩票
+	private int lottery_type_id; // 彩票类型，1:福利彩票 2:体育彩票
 	private String remarks; // 描述信息 {每周二、四、日开奖}
 	
 	public String getLottery_id() {
@@ -27,11 +28,11 @@ public class LottoTypeModel implements Serializable {
 		this.lottery_name = lottery_name;
 	}
 	
-	public String getLottery_type_id() {
+	public int getLottery_type_id() {
 		return lottery_type_id;
 	}
 	
-	public void setLottery_type_id(String lottery_type_id) {
+	public void setLottery_type_id(int lottery_type_id) {
 		this.lottery_type_id = lottery_type_id;
 	}
 	
