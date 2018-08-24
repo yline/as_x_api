@@ -16,19 +16,34 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    defaultConfig {
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
+    // 系统的
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:multidex:1.0.3'
 
+    // 个人封装
     implementation 'com.yline.lib:LibSDK:2.3.1'
     implementation 'com.yline.lib:LibHttp:3.0.2'
     implementation 'com.yline.lib:LibViewRecycler:1.2.0'
 
+    // http
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.alibaba:fastjson:1.2.47'
+
+    // bugly
+    // implementation 'com.tencent.bugly:crashreport:2.6.6' 内容冗余了
+    implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
+    implementation 'com.tencent.bugly:crashreport_upgrade:1.3.5'
 }
