@@ -1,12 +1,24 @@
 package com.yline.lottery.module.main;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.yline.application.SDKManager;
+import com.yline.base.BaseFragmentActivity;
 import com.yline.http.callback.OnJsonCallback;
+import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.module.lotto.LottoTypeActivity;
 import com.yline.lottery.module.lotto.model.LottoBonusModel;
@@ -17,102 +29,116 @@ import com.yline.lottery.sp.SPManager;
 import com.yline.test.BaseTestActivity;
 import com.yline.utils.LogUtil;
 import com.yline.utils.SPUtil;
+import com.yline.view.recycler.adapter.AbstractPagerAdapter;
 
-public class MainActivity extends BaseTestActivity {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * 主页的整体
+ *
+ * @author yline 2018/8/30 -- 15:36
+ */
+public class MainActivity extends BaseFragmentActivity {
+	public static void launch(Context context) {
+		if (null != context) {
+			Intent intent = new Intent();
+			intent.setClass(context, MainActivity.class);
+			if (!(context instanceof Activity)) {
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			}
+			context.startActivity(intent);
+		}
+	}
+	
+	
+	private ActualFragment mActualFragment;
+	private HistoryFragment mHistoryFragment;
+	private QueryFragment mQueryFragment;
+	private MoreFragment mMoreFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		String lotteryId = SPManager.getInstance().getLotteryId();
-		if (TextUtils.isEmpty(lotteryId)) {
-			SDKManager.toast("请先选择彩票类型");
-			LottoTypeActivity.launch(MainActivity.this);
-		}
+		//		String lotteryId = SPManager.getInstance().getLotteryId();
+		//		if (TextUtils.isEmpty(lotteryId)) {
+		//			SDKManager.toast("请先选择彩票类型");
+		//			LottoTypeActivity.launch(MainActivity.this);
+		//		}
+		
+		setContentView(R.layout.activity_main);
+		initView();
+		initData();
 	}
 	
-	@Override
-	public void testStart(View view, Bundle savedInstanceState) {
-		addButton("选择彩票类型", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				LottoTypeActivity.launch(MainActivity.this);
-			}
-		});
+	private void initView() {
+		mActualFragment = new ActualFragment();
+		mHistoryFragment = new HistoryFragment();
+		mQueryFragment = new QueryFragment();
+		mMoreFragment = new MoreFragment();
 		
-		addButton("查询当前彩票类型", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				LottoTypeModel typeModel = SPManager.getInstance().getLotteryType();
-				LogUtil.v(LottoTypeActivity.getLottoTypeString(typeModel));
-			}
-		});
+		ViewPager viewPager = findViewById(R.id.main_view_pager);
+		viewPager.setOffscreenPageLimit(4);
+		TabLayout tabLayout = findViewById(R.id.main_tab);
 		
-		addButton("开奖结果查询", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String lotteryId = SPManager.getInstance().getLotteryId();
-				if (TextUtils.isEmpty(lotteryId)) {
-					return;
-				}
-				
-				OkHttpManager.lottoQuery(lotteryId, null, new OnJsonCallback<LottoQueryModel>() {
-					@Override
-					public void onFailure(int code, String msg) {
-					
-					}
-					
-					@Override
-					public void onResponse(LottoQueryModel lottoQueryModel) {
-					
-					}
-				});
-			}
-		});
+		MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+		viewPager.setAdapter(pagerAdapter);
+		tabLayout.setupWithViewPager(viewPager);
 		
-		addButton("历史查询，最近50条", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String lotteryId = SPManager.getInstance().getLotteryId();
-				if (TextUtils.isEmpty(lotteryId)) {
-					return;
-				}
-				
-				OkHttpManager.lottoQueryHistory(lotteryId, 50, 1, new OnJsonCallback<LottoHistoryModel>() {
-					@Override
-					public void onFailure(int code, String msg) {
-					
-					}
-					
-					@Override
-					public void onResponse(LottoHistoryModel lottoHistoryModel) {
-					
-					}
-				});
-			}
-		});
+		pagerAdapter.setViewList(new String[]{"最新", "历史", "查询", "更多"},
+				new Fragment[]{mActualFragment, mHistoryFragment, mQueryFragment, mMoreFragment});
 		
-		addButton("中奖计算器", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String lotteryId = SPManager.getInstance().getLotteryId();
-				if (TextUtils.isEmpty(lotteryId)) {
-					return;
-				}
-				
-				String lotteryNum = "01,11,02,09,14,22,25@05,03";
-				OkHttpManager.lottoBonus(lotteryId, null, lotteryNum, new OnJsonCallback<LottoBonusModel>() {
-					@Override
-					public void onFailure(int code, String msg) {
-					
-					}
-					
-					@Override
-					public void onResponse(LottoBonusModel lottoBonusModel) {
-					
-					}
-				});
+		initViewClick();
+	}
+	
+	private void initViewClick() {
+	
+	}
+	
+	private void initData() {
+	
+	}
+	
+	private class MainPagerAdapter extends FragmentStatePagerAdapter {
+		private List<String> mTitleList = new ArrayList<>();
+		private List<Fragment> mFragmentList = new ArrayList<>();
+		
+		private MainPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+		
+		@Override
+		public Fragment getItem(int position) {
+			return mFragmentList.get(position);
+		}
+		
+		@Override
+		public int getCount() {
+			return mFragmentList.size();
+		}
+		
+		@Nullable
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return mTitleList.get(position);
+		}
+		
+		/**
+		 * 设置数据，并更新界面
+		 *
+		 * @param titleArray    标题
+		 * @param fragmentArray 内容
+		 */
+		private void setViewList(String[] titleArray, Fragment[] fragmentArray) {
+			if (titleArray.length != fragmentArray.length || titleArray.length == 0) {
+				throw new RuntimeException("首页，设置的参数错误！！！");
 			}
-		});
+			
+			mTitleList = Arrays.asList(titleArray);
+			mFragmentList = Arrays.asList(fragmentArray);
+			notifyDataSetChanged();
+		}
 	}
 }

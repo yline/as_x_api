@@ -1,3 +1,139 @@
 <resources>
     <string name="app_name">Lottery</string>
+
+    <!-- 双色球 -->
+    <string name="ssq_source">维基百科</string>
+    <string name="ssq_source_url">https://zh.wikipedia.org/wiki/%E5%8F%8C%E8%89%B2%E7%90%83</string>
+    <string name="ssq_basic">
+        双色球是由中国福利彩票发行管理中心组织的，全国范围销售发行的乐透型(Lottery)彩票。
+        由民政部的直属事业单位"中国福利彩票发行管理中心"负责发行销售的彩票。
+        统一每注售价2元人民币
+
+        每周二、四、日开奖21:15在中国教育电视台一套直播开奖</string>
+    <string name="ssq_rule">
+        双色球每注投注号码由6个红色球号码和1个蓝色球号码组成。红色球号码从1—33中选择；蓝色球号码从1到16中选择。
+        每注需要选择6个红色球号码，1个蓝色球号码
+        每注统一投注金额为2元。采用全国统一奖池计奖。
+        双色球每周销售三期，分别在周二、周四、周日晚间开奖</string>
+
+    <string name="ssq_wards_one_condition">6红1蓝</string>
+    <string name="ssq_wards_one_result">当奖池资金低于1亿元时，一等奖奖金总额为当期高奖级奖金的75%与奖池中累积的资金之和，单注奖金按注均分，单注最高限额封顶1000万元。
+        当奖池资金高于1亿元（含）时，一等奖奖金总额包括两部分，一部分为当期高奖级奖金的55%与奖池中累积的资金之和，单注奖金按注均分，单注最高限额封顶1000万元；另一部分为当期高奖级奖金的20%，单注奖金按注均分，单注最高限额封顶1000万元</string>
+
+    <string name="ssq_wards_two_condition">6红0蓝</string>
+    <string name="ssq_wards_two_result">奖金总额为当期高奖级奖金的25%，单注奖金按注均分，单注最高限额封顶1000万元</string>
+
+    <string name="ssq_wards_three_condition">5红1蓝</string>
+    <string name="ssq_wards_three_result">3000￥</string>
+
+    <string name="ssq_wards_four_condition">5红或4红1蓝</string>
+    <string name="ssq_wards_four_result">200￥</string>
+
+    <string name="ssq_wards_five_condition">4红或3红1蓝</string>
+    <string name="ssq_wards_five_result">10￥</string>
+
+    <string name="ssq_wards_six_condition">1蓝</string>
+    <string name="ssq_wards_six_result">5￥</string>
+
+    <string name="ssq_wards_exchange">兑奖期限为开奖后一日起记60天内，除一、二等奖须到指定中心兑现外，其余奖金可在投注站中直接兑现。
+        一、二等奖须到各地省中心验证、登记和兑奖。</string>
+
+    <string name="ssq_rule_link_title">官方规则介绍</string>
+    <string name="ssq_rule_link_url">http://www.zhcw.com/ssq/youxiguize/506500.shtml</string>
+
+    <!-- 超级大乐透 -->
+    <string name="dlt_source">百度百科</string>
+    <string name="dlt_source_url">https://baike.baidu.com/item/%E4%B8%AD%E5%9B%BD%E4%BD%93%E8%82%B2%E5%BD%A9%E7%A5%A8%E8%B6%85%E7%BA%A7%E5%A4%A7%E4%B9%90%E9%80%8F/14435604?fromtitle=%E5%A4%A7%E4%B9%90%E9%80%8F&amp;fromid=784200</string>
+    <string name="dlt_basic">
+        超级大乐透是由国家体育总局体彩中心组织的，于2007年5月28日向全国推出的一种全新大盘彩票玩法。
+        统一每注售价2元人民币，追加3元
+
+        开奖日期：每周一、三、六开奖，CCTV-2财经频道21:10《经济信息联播》 时长30秒</string>
+    <string name="dlt_rule">
+        从01-35共35个号码中，选取5个号码为前区号码，并从01-12共12个号码中选取2个号码为后区号码，组合为一注进行单式投注。
+        除单式投注外，也可以进行胆拖投注、复式投注，每一基本投注金额为2元人民币。超级大乐透“35选5加12选2”最大的亮点是，购买者在基本投注的基础上，可进行追加投注，每注可追加1元人民币。
+        规则中规定，超级大乐透单张彩票基本投注的最大投注金额不超过20000元，基本投注加追加投注的最大投注金额不超过30000元。
+        开奖日期：每周一、三、六开奖</string>
+
+    <string name="dlt_wards_one_condition">5+2</string>
+    <string name="dlt_wards_one_result_base">"浮动</string>
+    <string name="dlt_wards_one_result_attach">"2元基本投注奖金"的 1.6倍</string>
+
+    <string name="dlt_wards_two_condition">5+1</string>
+    <string name="dlt_wards_two_result_base">"浮动</string>
+    <string name="dlt_wards_two_result_attach">"2元基本投注奖金"的1.6倍</string>
+
+    <string name="dlt_wards_three_condition">5+0 或 4+2</string>
+    <string name="dlt_wards_three_result_base">"浮动</string>
+    <string name="dlt_wards_three_result_attach">"2元基本投注奖金"的1.6倍</string>
+
+    <string name="dlt_wards_four_condition">4+1 或 3+2</string>
+    <string name="dlt_wards_four_result_base">200元</string>
+    <string name="dlt_wards_four_result_attach">300元</string>
+
+    <string name="dlt_wards_five_condition">4+0 或 3+1 或 2+2</string>
+    <string name="dlt_wards_five_result_base">10元</string>
+    <string name="dlt_wards_five_result_attach">15元</string>
+
+    <string name="dlt_wards_six_condition">3+0 或 1+2 或 2+1 或 0+2</string>
+    <string name="dlt_wards_six_result_base">5元</string>
+    <string name="dlt_wards_six_result_attach">5元</string>
+
+    <string name="dlt_wards_exchange">兑奖当期有效。中奖者应当自开奖之日起60个自然日内，持中奖彩票到指定的地点兑奖。
+        逾期未兑奖视为弃奖，弃奖奖金纳入彩票公益金。</string>
+
+    <!-- 七乐彩 -->
+    <string name="qlc_source">维基百科</string>
+    <string name="qlc_source_url">https://zh.wikipedia.org/wiki/%E4%B8%83%E4%B9%90%E5%BD%A9</string>
+    <string name="qlc_basic">
+        七乐彩由中国福利彩票发行管理中心组织发行，为福彩主力销售品种，每周三期分别于周一、周三、周五晚间开奖。
+        其发行的宗旨是向社会募集资金用于福利事业，统一每注售价2元人民币。
+        每周一、周三、周五21:15在中国教育电视台一套直播开奖
+    </string>
+    <string name="qlc_rule">
+        七乐彩采用组合式玩法，从01 - 30中选择7个号码组合为一注投注号码，特别号码包含于其中。</string>
+
+    <string name="qlc_wards_one_condition">全部（7个）</string>
+    <string name="qlc_wards_one_special">"不要</string>
+    <string name="qlc_wards_one_result">奖池的70%</string>
+
+    <string name="qlc_wards_two_condition">6个</string>
+    <string name="qlc_wards_two_special">"	要</string>
+    <string name="qlc_wards_two_result">奖池的10%</string>
+
+    <string name="qlc_wards_three_condition">6个</string>
+    <string name="qlc_wards_three_special">"不要</string>
+    <string name="qlc_wards_three_result">奖池的20%</string>
+
+    <string name="qlc_wards_four_condition">5个</string>
+    <string name="qlc_wards_four_special">	要</string>
+    <string name="qlc_wards_four_result">200￥</string>
+
+    <string name="qlc_wards_five_condition">5个</string>
+    <string name="qlc_wards_five_special">不要</string>
+    <string name="qlc_wards_five_result">50￥</string>
+
+    <string name="qlc_wards_six_condition">4个</string>
+    <string name="qlc_wards_six_special">要</string>
+    <string name="qlc_wards_six_result">10￥</string>
+
+    <string name="qlc_wards_seven_condition">4个</string>
+    <string name="qlc_wards_seven_special">不要</string>
+    <string name="qlc_wards_seven_result">5￥</string>
+
+    <string name="qlc_wards_exchange">兑奖期限为开奖后一日起记30天内，四等奖以降可于投注站直接兑现（二、三等理论上亦可）。
+        一、二、三等奖应到各地省中心验证、登记和兑奖。</string>
+
+    <string name="qlc_link_title">福彩官网-七乐彩专题页面</string>
+    <string name="qlc_link_url">http://www.zhcw.com/qlc/</string>
+
+    <!-- 福彩3D -->
+    
+
+    <!-- 七星彩 -->
+
+    <!-- 排列3 -->
+
+    <!-- 排列5 -->
+
 </resources>

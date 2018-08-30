@@ -66,6 +66,7 @@ public class OkHttpManager {
 	
 	/**
 	 * 支持彩种列表
+	 * 由于数据简单，而且基本无变化，直接写死
 	 */
 	public static void lottoType(OnJsonCallback<List<LottoTypeModel>> callback) {
 		String httpUrl = "http://apis.juhe.cn/lottery/types";
