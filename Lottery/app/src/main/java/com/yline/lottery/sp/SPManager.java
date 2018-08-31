@@ -4,6 +4,7 @@ import com.yline.application.SDKManager;
 import com.yline.http.json.FastJson;
 import com.yline.lottery.module.lotto.model.LottoTypeModel;
 import com.yline.lottery.http.manager.TypeEnum;
+import com.yline.lottery.module.main.model.ActualModel;
 import com.yline.utils.SPUtil;
 
 /**
@@ -29,12 +30,20 @@ public class SPManager {
 		return spManager;
 	}
 	
-	public void setType(TypeEnum typeEnum) {
-		System.currentTimeMillis();
+	public void setActualModel(TypeEnum typeEnum, String result, String number) {
+		SPUtil.put(SDKManager.getApplication(), Key.ActualTime + typeEnum.getId(), System.currentTimeMillis());
+		SPUtil.put(SDKManager.getApplication(), Key.ActualResult + typeEnum.getId(), result);
+		SPUtil.put(SDKManager.getApplication(), Key.ActualNumber + typeEnum.getId(), number);
 	}
 	
-	public void getType() {
+	public long getActualModelTime(TypeEnum typeEnum) {
+		return (long) SPUtil.get(SDKManager.getApplication(), Key.ActualTime + typeEnum.getId(), 0L);
+	}
 	
+	public ActualModel getActualModel(TypeEnum typeEnum) {
+		String result = (String) SPUtil.get(SDKManager.getApplication(), Key.ActualResult + typeEnum.getId(), "");
+		String number = (String) SPUtil.get(SDKManager.getApplication(), Key.ActualNumber + typeEnum.getId(), "");
+		return ActualModel.genActualModel(typeEnum, result, number);
 	}
 	
 	public String getLotteryId() {
@@ -58,5 +67,9 @@ public class SPManager {
 	private static class Key {
 		private static final String LotteryId = "lottery_id";
 		private static final String LotteryType = "lottery_type";
+		
+		private static final String ActualResult = "actual_result_";
+		private static final String ActualNumber = "actual_number_";
+		private static final String ActualTime = "actual_time_";
 	}
 }

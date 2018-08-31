@@ -9,19 +9,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yline.application.SDKManager;
 import com.yline.base.BaseFragment;
 import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.module.lotto.model.LottoQueryModel;
 import com.yline.lottery.http.manager.TypeEnum;
+import com.yline.lottery.module.main.model.ActualModel;
+import com.yline.lottery.sp.SPManager;
+import com.yline.utils.LogUtil;
 import com.yline.view.recycler.adapter.AbstractRecyclerAdapter;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 首页 - 最新
+ * PS：接口受到限制，因此只能本地缓存；
+ * 机制：每日更新一次，有数据且日期正确则不请求，无数据或日期不对则请求
+ * 本地日期不准确也没办法，谁让接口有限制呢（本人穷）
  *
  * @author yline 2018/8/30 -- 15:36
  */
@@ -29,7 +39,7 @@ public class ActualFragment extends BaseFragment {
 	private ActualRecyclerAdapter mRecyclerAdapter;
 	
 	private int callbackCount;
-	private List<LottoQueryModel> mQueryModelList;
+	private List<ActualModel> mActualModelList = new ArrayList<>();
 	
 	@Nullable
 	@Override
@@ -40,8 +50,9 @@ public class ActualFragment extends BaseFragment {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		
 		initView(view);
-		// initData();
+		initData();
 	}
 	
 	private void initView(View view) {
@@ -58,44 +69,78 @@ public class ActualFragment extends BaseFragment {
 	
 	}
 	
+	/**
+	 * 保证一天只请求一天
+	 */
 	private void initData() {
 		callbackCount = 0;
 		for (final TypeEnum typeEnum : TypeEnum.values()) {
-			OkHttpManager.lottoQuery(typeEnum.getId(), null, new OnJsonCallback<LottoQueryModel>() {
-				@Override
-				public void onFailure(int code, String msg) {
-					updateData(typeEnum, null);
-				}
-				
-				@Override
-				public void onResponse(LottoQueryModel lottoQueryModel) {
-					updateData(typeEnum, lottoQueryModel);
-				}
-			});
+			long lastSaveTime = SPManager.getInstance().getActualModelTime(typeEnum);
+			boolean isSameDate = isSameDate(lastSaveTime);
+			if (!isSameDate) {
+				OkHttpManager.lottoQuery(typeEnum.getId(), null, new OnJsonCallback<LottoQueryModel>() {
+					@Override
+					public void onFailure(int code, String msg) {
+						updateData(null, null, null);
+					}
+					
+					@Override
+					public void onResponse(LottoQueryModel lottoQueryModel) {
+						if (null != lottoQueryModel) {
+							updateData(typeEnum, lottoQueryModel.getLottery_res(), lottoQueryModel.getLottery_no());
+						} else {
+							updateData(null, null, null);
+						}
+					}
+				});
+			} else {
+				ActualModel todayActualModel = SPManager.getInstance().getActualModel(typeEnum);
+				updateData(typeEnum, todayActualModel.getResult(), todayActualModel.getNumber());
+			}
 		}
 	}
 	
-	private void updateData(TypeEnum typeEnum, LottoQueryModel lottoQueryModel) {
+	private void updateData(TypeEnum typeEnum, String result, String number) {
 		callbackCount++;
-		if (null != lottoQueryModel) {
-			mQueryModelList.add(lottoQueryModel);
+		
+		if (null != typeEnum) {
+			SPManager.getInstance().setActualModel(typeEnum, result, number);
+			LogUtil.v(result + " - " + number);
+			mActualModelList.add(ActualModel.genActualModel(typeEnum, result, number));
 		}
 		
 		if (callbackCount == TypeEnum.values().length) {
-			mRecyclerAdapter.setDataList(mQueryModelList, true);
+			mRecyclerAdapter.setDataList(mActualModelList, true);
 		}
 	}
 	
-	private class ActualRecyclerAdapter extends AbstractRecyclerAdapter<LottoQueryModel> {
-		
+	private class ActualRecyclerAdapter extends AbstractRecyclerAdapter<ActualModel> {
 		@Override
 		public int getItemRes() {
-			return 0;
+			return R.layout.item_fragment_actual;
 		}
 		
 		@Override
 		public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-		
+			ActualModel actualModel = get(position);
 		}
+	}
+	
+	/**
+	 * 判断日期是否相同
+	 *
+	 * @return true(相同)
+	 */
+	private static boolean isSameDate(long lastSaveTime) {
+		Calendar calendar = Calendar.getInstance(Locale.CHINA);
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		int nowYear = calendar.get(Calendar.YEAR);
+		int nowDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+		
+		calendar.setTimeInMillis(lastSaveTime);
+		int lastSaveYear = calendar.get(Calendar.YEAR);
+		int lastSaveDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+		
+		return (nowYear == lastSaveYear && nowDayOfYear == lastSaveDayOfYear);
 	}
 }
