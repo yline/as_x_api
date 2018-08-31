@@ -11,6 +11,8 @@ import com.yline.lottery.module.lotto.model.LottoBonusModel;
 import com.yline.lottery.module.lotto.model.LottoHistoryModel;
 import com.yline.lottery.module.lotto.model.LottoQueryModel;
 import com.yline.lottery.module.lotto.model.LottoTypeModel;
+import com.yline.lottery.http.manager.TypeEnum;
+import com.yline.lottery.module.rule.RuleActivity;
 import com.yline.lottery.sp.SPManager;
 import com.yline.test.BaseTestFragment;
 import com.yline.utils.LogUtil;
@@ -19,6 +21,49 @@ public class MoreFragment extends BaseTestFragment {
 	
 	@Override
 	public void testStart(View view, Bundle savedInstanceState) {
+		addButton("展示规则 - 双色球", new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				RuleActivity.launch(getActivity(), TypeEnum.SSQ);
+			}
+		});
+		addButton("展示规则 - 超级大乐透", new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				RuleActivity.launch(getActivity(), TypeEnum.DLT);
+			}
+		});
+		addButton("展示规则 - 七乐彩", new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				RuleActivity.launch(getActivity(), TypeEnum.QLC);
+			}
+		});
+		addButton("展示规则 - 福彩3D", new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				RuleActivity.launch(getActivity(), TypeEnum.FCSD);
+			}
+		});
+		addButton("展示规则 - 七星彩", new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				RuleActivity.launch(getActivity(), TypeEnum.QXC);
+			}
+		});
+		addButton("展示规则 - 排列3", new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				RuleActivity.launch(getActivity(), TypeEnum.PLS);
+			}
+		});
+		addButton("展示规则 - 排列5", new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				RuleActivity.launch(getActivity(), TypeEnum.PLW);
+			}
+		});
+		
 		addButton("选择彩票类型", new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

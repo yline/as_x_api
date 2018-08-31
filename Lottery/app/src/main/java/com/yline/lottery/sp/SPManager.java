@@ -3,6 +3,7 @@ package com.yline.lottery.sp;
 import com.yline.application.SDKManager;
 import com.yline.http.json.FastJson;
 import com.yline.lottery.module.lotto.model.LottoTypeModel;
+import com.yline.lottery.http.manager.TypeEnum;
 import com.yline.utils.SPUtil;
 
 /**
@@ -26,6 +27,14 @@ public class SPManager {
 			}
 		}
 		return spManager;
+	}
+	
+	public void setType(TypeEnum typeEnum) {
+		System.currentTimeMillis();
+	}
+	
+	public void getType() {
+	
 	}
 	
 	public String getLotteryId() {

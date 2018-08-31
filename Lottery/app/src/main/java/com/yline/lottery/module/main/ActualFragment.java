@@ -14,11 +14,10 @@ import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.module.lotto.model.LottoQueryModel;
-import com.yline.lottery.module.main.model.TypeEnum;
+import com.yline.lottery.http.manager.TypeEnum;
 import com.yline.view.recycler.adapter.AbstractRecyclerAdapter;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -42,7 +41,7 @@ public class ActualFragment extends BaseFragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		initView(view);
-		initData();
+		// initData();
 	}
 	
 	private void initView(View view) {
