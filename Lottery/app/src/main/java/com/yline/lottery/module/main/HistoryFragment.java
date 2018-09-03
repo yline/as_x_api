@@ -16,6 +16,8 @@ import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.http.model.LottoHistoryModel;
+import com.yline.lottery.module.main.view.SwitchLottoTypeView;
+import com.yline.lottery.module.type.LottoTypeActivity;
 import com.yline.lottery.sp.SPManager;
 import com.yline.view.recycler.adapter.AbstractHeadFootRecyclerAdapter;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
@@ -28,7 +30,9 @@ import com.yline.view.recycler.holder.RecyclerViewHolder;
  */
 public class HistoryFragment extends BaseFragment {
 	private static final int PAGE_SIZE = 50; // 最大50，默认50
+	
 	private HistoryRecyclerAdapter mRecyclerAdapter;
+	private SwitchLottoTypeView mHeaderView;
 	private int pageNum;
 	
 	@Nullable
@@ -51,11 +55,20 @@ public class HistoryFragment extends BaseFragment {
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerView.setAdapter(mRecyclerAdapter);
 		
+		mHeaderView = new SwitchLottoTypeView(getActivity());
+		mRecyclerAdapter.addHeadView(mHeaderView);
+		
 		initViewClick();
 	}
 	
 	private void initViewClick() {
-	
+		// 切换彩种
+		mHeaderView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LottoTypeActivity.launch(getActivity());
+			}
+		});
 	}
 	
 	private void initData() {

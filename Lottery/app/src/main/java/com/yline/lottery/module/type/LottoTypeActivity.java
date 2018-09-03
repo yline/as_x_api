@@ -66,6 +66,7 @@ public class LottoTypeActivity extends BaseActivity {
 				SDKManager.toast("选择成功");
 				
 				SPManager.getInstance().setUserLotteryId(lottoTypeModel.getLottery_id());
+				SPManager.getInstance().setUserLotteryName(lottoTypeModel.getLottery_name());
 				SPManager.getInstance().setUserLotteryType(lottoTypeModel);
 				
 				finish();

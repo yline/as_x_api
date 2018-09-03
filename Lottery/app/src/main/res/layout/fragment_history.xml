@@ -3,13 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 点击切换彩种，放到头部里面好了 -->
-    <TextView
-        android:id="@+id/history_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="彩种" />
-
     <!-- 下拉刷新，上拉加载更多 -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/history_recycler"

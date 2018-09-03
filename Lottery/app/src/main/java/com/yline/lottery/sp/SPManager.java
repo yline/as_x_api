@@ -152,6 +152,14 @@ public class SPManager {
 		SPUtil.put(SDKManager.getApplication(), Key.UserLotteryId, lotteryId);
 	}
 	
+	public String getUserLotteryName(){
+		return (String) SPUtil.get(SDKManager.getApplication(), Key.UserLotteryName, "");
+	}
+	
+	public void setUserLotteryName(String lotteryName){
+		SPUtil.put(SDKManager.getApplication(), Key.UserLotteryName, lotteryName);
+	}
+	
 	public LottoTypeModel getUserLotteryType() {
 		String typeString = (String) SPUtil.get(SDKManager.getApplication(), Key.UserLotteryType, "");
 		return FastJson.toClass(typeString, LottoTypeModel.class);
@@ -179,6 +187,7 @@ public class SPManager {
 		
 		// 历史查询，切换默认的彩种展示
 		private static final String UserLotteryId = "user_lottery_id";
+		private static final String UserLotteryName = "user_lottery_name";
 		private static final String UserLotteryType = "user_lottery_type";
 	}
 }
