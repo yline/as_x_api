@@ -8,28 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.TextView;
 
-import com.yline.application.SDKManager;
 import com.yline.base.BaseFragmentActivity;
-import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
-import com.yline.lottery.http.OkHttpManager;
-import com.yline.lottery.module.lotto.LottoTypeActivity;
-import com.yline.lottery.module.lotto.model.LottoBonusModel;
-import com.yline.lottery.module.lotto.model.LottoHistoryModel;
-import com.yline.lottery.module.lotto.model.LottoQueryModel;
-import com.yline.lottery.module.lotto.model.LottoTypeModel;
-import com.yline.lottery.sp.SPManager;
-import com.yline.test.BaseTestActivity;
-import com.yline.utils.LogUtil;
-import com.yline.utils.SPUtil;
-import com.yline.view.recycler.adapter.AbstractPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +34,6 @@ public class MainActivity extends BaseFragmentActivity {
 			context.startActivity(intent);
 		}
 	}
-	
 	
 	private ActualFragment mActualFragment;
 	private HistoryFragment mHistoryFragment;

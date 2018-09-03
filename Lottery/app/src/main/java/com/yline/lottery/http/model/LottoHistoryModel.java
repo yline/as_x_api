@@ -1,6 +1,7 @@
-package com.yline.lottery.module.lotto.model;
+package com.yline.lottery.http.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class LottoHistoryModel implements Serializable {
 	private static final long serialVersionUID = -2326505114769867123L;
@@ -8,8 +9,9 @@ public class LottoHistoryModel implements Serializable {
 	private int page; // 	当前页数 - 1
 	private int pageSize; // 每页返回条数 - 5
 	private int totalPage; // 总页数 - 447
+	private List<HistoryDetail> lotteryResList; // 详细数据
 	
-	public class HistoryDetail implements Serializable {
+	public static class HistoryDetail implements Serializable {
 		private static final long serialVersionUID = 8277399259712151099L;
 		
 		private String lottery_id; // 彩票种类 id
@@ -75,6 +77,14 @@ public class LottoHistoryModel implements Serializable {
 		public void setLottery_pool_amount(String lottery_pool_amount) {
 			this.lottery_pool_amount = lottery_pool_amount;
 		}
+	}
+	
+	public List<HistoryDetail> getLotteryResList() {
+		return lotteryResList;
+	}
+	
+	public void setLotteryResList(List<HistoryDetail> lotteryResList) {
+		this.lotteryResList = lotteryResList;
 	}
 	
 	public int getPage() {

@@ -3,10 +3,10 @@ package com.yline.lottery.http;
 import com.yline.http.OkHttpUtils;
 import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.http.adapter.LottoHttpAdapter;
-import com.yline.lottery.module.lotto.model.LottoBonusModel;
-import com.yline.lottery.module.lotto.model.LottoHistoryModel;
-import com.yline.lottery.module.lotto.model.LottoQueryModel;
-import com.yline.lottery.module.lotto.model.LottoTypeModel;
+import com.yline.lottery.http.model.LottoBonusModel;
+import com.yline.lottery.http.model.LottoHistoryModel;
+import com.yline.lottery.http.model.LottoQueryModel;
+import com.yline.lottery.http.model.LottoTypeModel;
 
 import java.util.List;
 import java.util.Map;

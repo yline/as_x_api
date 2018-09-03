@@ -1,11 +1,5 @@
 package com.yline.lottery.module.main.model;
 
-import android.widget.Space;
-
-import com.yline.lottery.http.manager.TypeEnum;
-import com.yline.lottery.module.lotto.model.LottoQueryModel;
-import com.yline.lottery.sp.SPManager;
-
 import java.io.Serializable;
 
 /**
@@ -16,24 +10,34 @@ import java.io.Serializable;
 public class ActualModel implements Serializable {
 	private static final long serialVersionUID = 5411295556852090892L;
 	
-	private TypeEnum typeEnum;
+	private String lottoId;
 	private String result; // "03,08,11,14,18,23,16",
 	private String number; // 开奖期号 18028
+	private String date; // 开奖日期 "2018-03-13"
 	
-	public static ActualModel genActualModel(TypeEnum typeEnum, String result, String number) {
+	public static ActualModel genActualModel(String lottoId, String result, String number, String date) {
 		ActualModel actualModel = new ActualModel();
-		actualModel.typeEnum = typeEnum;
+		actualModel.lottoId = lottoId;
 		actualModel.result = result;
 		actualModel.number = number;
+		actualModel.date = date;
 		return actualModel;
 	}
 	
-	public TypeEnum getTypeEnum() {
-		return typeEnum;
+	public String getDate() {
+		return date;
 	}
 	
-	public void setTypeEnum(TypeEnum typeEnum) {
-		this.typeEnum = typeEnum;
+	public void setDate(String date) {
+		this.date = date;
+	}
+	
+	public String getLottoId() {
+		return lottoId;
+	}
+	
+	public void setLottoId(String lottoId) {
+		this.lottoId = lottoId;
 	}
 	
 	public String getResult() {

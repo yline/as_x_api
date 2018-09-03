@@ -8,9 +8,10 @@
         android:id="@+id/main_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         app:tabGravity="fill"
+        app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"
-        app:tabIndicatorColor="@color/colorAccent"
         app:tabSelectedTextColor="@android:color/black"
         app:tabTextColor="@android:color/darker_gray" />
 
@@ -18,5 +19,5 @@
         android:id="@+id/main_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/main_tab" />
+        android:layout_above="@id/main_tab" />
 </RelativeLayout>

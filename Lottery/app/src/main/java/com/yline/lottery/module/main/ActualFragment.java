@@ -9,13 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yline.application.SDKManager;
 import com.yline.base.BaseFragment;
 import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
-import com.yline.lottery.module.lotto.model.LottoQueryModel;
-import com.yline.lottery.http.manager.TypeEnum;
+import com.yline.lottery.http.model.LottoQueryModel;
 import com.yline.lottery.module.main.model.ActualModel;
 import com.yline.lottery.sp.SPManager;
 import com.yline.utils.LogUtil;
@@ -74,42 +72,44 @@ public class ActualFragment extends BaseFragment {
 	 */
 	private void initData() {
 		callbackCount = 0;
-		for (final TypeEnum typeEnum : TypeEnum.values()) {
-			long lastSaveTime = SPManager.getInstance().getActualModelTime(typeEnum);
+		
+		List<String> idList = SPManager.getInstance().getLottoTypeIdList();
+		for (final String lottoId : idList) {
+			long lastSaveTime = SPManager.getInstance().getActualModelTime(lottoId);
 			boolean isSameDate = isSameDate(lastSaveTime);
 			if (!isSameDate) {
-				OkHttpManager.lottoQuery(typeEnum.getId(), null, new OnJsonCallback<LottoQueryModel>() {
+				OkHttpManager.lottoQuery(lottoId, null, new OnJsonCallback<LottoQueryModel>() {
 					@Override
 					public void onFailure(int code, String msg) {
-						updateData(null, null, null);
+						updateData(null, null, null, null);
 					}
 					
 					@Override
 					public void onResponse(LottoQueryModel lottoQueryModel) {
 						if (null != lottoQueryModel) {
-							updateData(typeEnum, lottoQueryModel.getLottery_res(), lottoQueryModel.getLottery_no());
+							updateData(lottoId, lottoQueryModel.getLottery_res(), lottoQueryModel.getLottery_no(), lottoQueryModel.getLottery_date());
 						} else {
-							updateData(null, null, null);
+							updateData(null, null, null, null);
 						}
 					}
 				});
 			} else {
-				ActualModel todayActualModel = SPManager.getInstance().getActualModel(typeEnum);
-				updateData(typeEnum, todayActualModel.getResult(), todayActualModel.getNumber());
+				ActualModel todayActualModel = SPManager.getInstance().getActualModel(lottoId);
+				updateData(lottoId, todayActualModel.getResult(), todayActualModel.getNumber(), todayActualModel.getDate());
 			}
 		}
 	}
 	
-	private void updateData(TypeEnum typeEnum, String result, String number) {
+	private void updateData(String lottoId, String result, String number, String date) {
 		callbackCount++;
 		
-		if (null != typeEnum) {
-			SPManager.getInstance().setActualModel(typeEnum, result, number);
+		if (null != lottoId) {
+			SPManager.getInstance().setActualModel(lottoId, result, number, date);
 			LogUtil.v(result + " - " + number);
-			mActualModelList.add(ActualModel.genActualModel(typeEnum, result, number));
+			mActualModelList.add(ActualModel.genActualModel(lottoId, result, number, date));
 		}
 		
-		if (callbackCount == TypeEnum.values().length) {
+		if (callbackCount == SPManager.getInstance().getLottoTypeCount() ) {
 			mRecyclerAdapter.setDataList(mActualModelList, true);
 		}
 	}
@@ -123,6 +123,13 @@ public class ActualFragment extends BaseFragment {
 		@Override
 		public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
 			ActualModel actualModel = get(position);
+			
+			String lottoId = actualModel.getLottoId();
+			String lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
+			String info = String.format("%s  第%s期  开奖：%s", lottoName, actualModel.getNumber(), actualModel.getDate());
+			holder.setText(R.id.item_actual_info, info);
+			
+			holder.setText(R.id.item_actual_number, actualModel.getResult());
 		}
 	}
 	

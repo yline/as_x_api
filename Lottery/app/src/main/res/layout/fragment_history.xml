@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <!-- 点击切换彩种，放到头部里面好了 -->
+    <TextView
+        android:id="@+id/history_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="彩种" />
+
+    <!-- 下拉刷新，上拉加载更多 -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/history_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>

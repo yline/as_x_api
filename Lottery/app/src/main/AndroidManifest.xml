@@ -23,15 +23,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".module.main.MainActivity">
+        <activity android:name=".module.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.lotto.LottoTypeActivity" />
-        <activity android:name=".module.rule.RuleActivity" />
+        <activity android:name=".module.main.MainActivity" />
+        <activity android:name=".module.type.LottoTypeActivity" />
+        <activity android:name=".module.rule.LottoRuleActivity" />
 
         <!-- Bugly 配置APP渠道号，配置在这里，方便多渠道打包 -->
         <meta-data

@@ -1,0 +1,90 @@
+package com.yline.lottery.module.splash;
+
+import android.os.Bundle;
+
+import com.yline.application.SDKManager;
+import com.yline.base.BaseActivity;
+import com.yline.http.callback.OnJsonCallback;
+import com.yline.lottery.R;
+import com.yline.lottery.http.OkHttpManager;
+import com.yline.lottery.http.model.LottoTypeModel;
+import com.yline.lottery.module.main.MainActivity;
+import com.yline.lottery.sp.SPManager;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * 闪屏界面 + 初始化界面
+ *
+ * @author yline 2018/9/3 -- 15:11
+ */
+public class SplashActivity extends BaseActivity {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_splash);
+		
+		initView();
+		initData();
+	}
+	
+	private void initView() {
+		
+		initViewClick();
+	}
+	
+	private void initViewClick() {
+	
+	}
+	
+	private void initData() {
+		// 闪烁界面
+		long lastSaveTime = SPManager.getInstance().getLottoTypeSaveTime();
+		boolean isSameMonth = isSameMonth(lastSaveTime);
+		if (isSameMonth) {
+			SDKManager.getHandler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					finish();
+					MainActivity.launch(SplashActivity.this);
+				}
+			}, 1000);
+		} else {
+			OkHttpManager.lottoType(new OnJsonCallback<List<LottoTypeModel>>() {
+				@Override
+				public void onFailure(int code, String msg) {
+					// do nothing
+					finish();
+				}
+				
+				@Override
+				public void onResponse(List<LottoTypeModel> lottoTypeModels) {
+					SPManager.getInstance().setLottoTypeList(lottoTypeModels);
+					finish();
+					MainActivity.launch(SplashActivity.this);
+				}
+			});
+		}
+	}
+	
+	/**
+	 * 判断是否月份相同
+	 *
+	 * @param lastSaveTime 上次保存的时间戳
+	 * @return true(相同)
+	 */
+	private boolean isSameMonth(long lastSaveTime) {
+		Calendar calendar = Calendar.getInstance(Locale.CHINA);
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		
+		int nowYear = calendar.get(Calendar.YEAR);
+		int nowMonth = calendar.get(Calendar.MONTH);
+		
+		calendar.setTimeInMillis(lastSaveTime);
+		int lastYear = calendar.get(Calendar.YEAR);
+		int lastMonth = calendar.get(Calendar.MONTH);
+		return (nowYear == lastYear && nowMonth == lastMonth);
+	}
+}

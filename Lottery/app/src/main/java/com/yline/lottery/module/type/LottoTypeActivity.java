@@ -1,4 +1,4 @@
-package com.yline.lottery.module.lotto;
+package com.yline.lottery.module.type;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +14,7 @@ import com.yline.base.BaseActivity;
 import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
-import com.yline.lottery.module.lotto.model.LottoTypeModel;
+import com.yline.lottery.http.model.LottoTypeModel;
 import com.yline.lottery.sp.SPManager;
 import com.yline.view.recycler.adapter.AbstractRecyclerAdapter;
 import com.yline.view.recycler.holder.Callback;
@@ -22,6 +22,11 @@ import com.yline.view.recycler.holder.RecyclerViewHolder;
 
 import java.util.List;
 
+/**
+ * 用户选择，彩票类型
+ *
+ * @author yline 2018/9/3 -- 17:23
+ */
 public class LottoTypeActivity extends BaseActivity {
 	public static void launch(Context context) {
 		if (null != context) {
@@ -60,8 +65,8 @@ public class LottoTypeActivity extends BaseActivity {
 			public void onItemClick(RecyclerViewHolder viewHolder, LottoTypeModel lottoTypeModel, int position) {
 				SDKManager.toast("选择成功");
 				
-				SPManager.getInstance().setLotteryId(lottoTypeModel.getLottery_id());
-				SPManager.getInstance().setLotteryType(lottoTypeModel);
+				SPManager.getInstance().setUserLotteryId(lottoTypeModel.getLottery_id());
+				SPManager.getInstance().setUserLotteryType(lottoTypeModel);
 				
 				finish();
 			}

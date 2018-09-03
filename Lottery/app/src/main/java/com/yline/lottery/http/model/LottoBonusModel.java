@@ -1,4 +1,4 @@
-package com.yline.lottery.module.lotto.model;
+package com.yline.lottery.http.model;
 
 import java.io.Serializable;
 import java.util.List;
