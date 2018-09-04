@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
 import android.webkit.WebView;
 
 import com.yline.base.BaseActivity;
 import com.yline.lottery.R;
+import com.yline.lottery.module.type.LottoTypeActivity;
+import com.yline.lottery.sp.SPManager;
 
 import java.util.HashSet;
 
@@ -17,6 +21,8 @@ import java.util.HashSet;
  * @author yline 2018/8/31 -- 11:35
  */
 public class LottoRuleActivity extends BaseActivity {
+	private static final int REQUEST_CODE_SWITCH = 1;
+	
 	private static final String SSQ = "ssq"; // 双色球
 	private static final String DLT = "dlt"; // 超级大乐透
 	private static final String QLC = "qlc"; // 七乐彩
@@ -55,6 +61,9 @@ public class LottoRuleActivity extends BaseActivity {
 		}
 	}
 	
+	private WebView mWebView;
+	private View mSwitchView;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,7 +80,40 @@ public class LottoRuleActivity extends BaseActivity {
 			}
 		}
 		
-		WebView webView = findViewById(R.id.rule_webview);
-		webView.loadUrl("file:///android_asset/rule/" + fileName + ".html");
+		initView();
+		initData(fileName);
+	}
+	
+	private void initView() {
+		mSwitchView = findViewById(R.id.rule_switch_type);
+		mWebView = findViewById(R.id.rule_webview);
+		
+		initViewClick();
+	}
+	
+	private void initViewClick() {
+		mSwitchView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LottoTypeActivity.launchForResult(LottoRuleActivity.this, REQUEST_CODE_SWITCH);
+			}
+		});
+	}
+	
+	private void initData(String fileName) {
+		mWebView.loadUrl("file:///android_asset/rule/" + fileName + ".html");
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_CODE_SWITCH) {
+			if (resultCode == Activity.RESULT_OK) {
+				String fileName = SPManager.getInstance().getUserLotteryId();
+				if (!TextUtils.isEmpty(fileName)) {
+					initData(fileName);
+				}
+			}
+		}
 	}
 }

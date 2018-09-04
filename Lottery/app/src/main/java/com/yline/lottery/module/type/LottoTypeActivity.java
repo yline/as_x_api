@@ -30,8 +30,16 @@ import java.util.List;
  * @author yline 2018/9/3 -- 17:23
  */
 public class LottoTypeActivity extends BaseActivity {
-	public static void launchForResult(BaseFragment fragment, int requestCode){
-		if (null != fragment){
+	public static void launchForResult(Activity activity, int requestCode) {
+		if (null != activity) {
+			Intent intent = new Intent();
+			intent.setClass(activity, LottoTypeActivity.class);
+			activity.startActivityForResult(intent, requestCode);
+		}
+	}
+	
+	public static void launchForResult(BaseFragment fragment, int requestCode) {
+		if (null != fragment) {
 			Intent intent = new Intent();
 			intent.setClass(fragment.requireContext(), LottoTypeActivity.class);
 			fragment.startActivityForResult(intent, requestCode);

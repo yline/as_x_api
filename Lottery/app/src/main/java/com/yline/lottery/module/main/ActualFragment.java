@@ -121,8 +121,12 @@ public class ActualFragment extends BaseFragment {
 		}
 		
 		if (callbackCount == SPManager.getInstance().getLottoTypeCount()) {
-			mLoadingView.loadSuccess();
-			mRecyclerAdapter.setDataList(mActualModelList, true);
+			if (mActualModelList.isEmpty()) {
+				mLoadingView.loadFailed();
+			} else {
+				mLoadingView.loadSuccess();
+				mRecyclerAdapter.setDataList(mActualModelList, true);
+			}
 		}
 	}
 	

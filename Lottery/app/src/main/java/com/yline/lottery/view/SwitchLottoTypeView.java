@@ -1,4 +1,4 @@
-package com.yline.lottery.module.main.view;
+package com.yline.lottery.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

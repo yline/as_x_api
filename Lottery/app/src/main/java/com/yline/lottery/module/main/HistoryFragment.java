@@ -18,7 +18,7 @@ import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.http.model.LottoHistoryModel;
-import com.yline.lottery.module.main.view.SwitchLottoTypeView;
+import com.yline.lottery.view.SwitchLottoTypeView;
 import com.yline.lottery.module.type.LottoTypeActivity;
 import com.yline.lottery.sp.SPManager;
 import com.yline.lottery.view.LoadingView;
