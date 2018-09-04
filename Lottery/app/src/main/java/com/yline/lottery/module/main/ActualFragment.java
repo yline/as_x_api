@@ -16,6 +16,7 @@ import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.http.model.LottoQueryModel;
 import com.yline.lottery.module.main.model.ActualModel;
 import com.yline.lottery.sp.SPManager;
+import com.yline.lottery.view.LoadingView;
 import com.yline.utils.LogUtil;
 import com.yline.view.recycler.adapter.AbstractRecyclerAdapter;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
@@ -35,6 +36,7 @@ import java.util.Locale;
  */
 public class ActualFragment extends BaseFragment {
 	private ActualRecyclerAdapter mRecyclerAdapter;
+	private LoadingView mLoadingView;
 	
 	private int callbackCount;
 	private List<ActualModel> mActualModelList = new ArrayList<>();
@@ -60,17 +62,26 @@ public class ActualFragment extends BaseFragment {
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerView.setAdapter(mRecyclerAdapter);
 		
+		mLoadingView = view.findViewById(R.id.actual_loading);
+		
 		initViewClick();
 	}
 	
 	private void initViewClick() {
-	
+		mLoadingView.setOnReloadClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				initData();
+			}
+		});
 	}
 	
 	/**
 	 * 保证一天只请求一天
 	 */
 	private void initData() {
+		mLoadingView.loading();
+		
 		callbackCount = 0;
 		
 		List<String> idList = SPManager.getInstance().getLottoTypeIdList();
@@ -109,7 +120,8 @@ public class ActualFragment extends BaseFragment {
 			mActualModelList.add(ActualModel.genActualModel(lottoId, result, number, date));
 		}
 		
-		if (callbackCount == SPManager.getInstance().getLottoTypeCount() ) {
+		if (callbackCount == SPManager.getInstance().getLottoTypeCount()) {
+			mLoadingView.loadSuccess();
 			mRecyclerAdapter.setDataList(mActualModelList, true);
 		}
 	}

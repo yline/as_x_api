@@ -43,14 +43,8 @@ public class MainActivity extends BaseFragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		//		String lotteryId = SPManager.getInstance().getLotteryId();
-		//		if (TextUtils.isEmpty(lotteryId)) {
-		//			SDKManager.toast("请先选择彩票类型");
-		//			LottoTypeActivity.launch(MainActivity.this);
-		//		}
-		
 		setContentView(R.layout.activity_main);
+		
 		initView();
 		initData();
 	}

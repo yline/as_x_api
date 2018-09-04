@@ -63,12 +63,12 @@ public class MoreFragment extends BaseTestFragment {
 			}
 		});
 		
-		addButton("选择彩票类型", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				LottoTypeActivity.launch(getActivity());
-			}
-		});
+//		addButton("选择彩票类型", new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				LottoTypeActivity.launchForResult(getActivity(), 2);
+//			}
+//		});
 		
 		addButton("查询当前彩票类型", new View.OnClickListener() {
 			@Override

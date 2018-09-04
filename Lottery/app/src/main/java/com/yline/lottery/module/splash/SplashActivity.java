@@ -1,6 +1,7 @@
 package com.yline.lottery.module.splash;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.yline.application.SDKManager;
 import com.yline.base.BaseActivity;
@@ -56,6 +57,9 @@ public class SplashActivity extends BaseActivity {
 				@Override
 				public void onFailure(int code, String msg) {
 					// do nothing
+					if (TextUtils.isEmpty(msg)) {
+						SDKManager.toast("首次安装请打开网络");
+					}
 					finish();
 				}
 				

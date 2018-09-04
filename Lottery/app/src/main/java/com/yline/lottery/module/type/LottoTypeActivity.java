@@ -11,11 +11,13 @@ import android.view.View;
 
 import com.yline.application.SDKManager;
 import com.yline.base.BaseActivity;
+import com.yline.base.BaseFragment;
 import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.http.model.LottoTypeModel;
 import com.yline.lottery.sp.SPManager;
+import com.yline.lottery.view.LoadingView;
 import com.yline.view.recycler.adapter.AbstractRecyclerAdapter;
 import com.yline.view.recycler.holder.Callback;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
@@ -28,18 +30,16 @@ import java.util.List;
  * @author yline 2018/9/3 -- 17:23
  */
 public class LottoTypeActivity extends BaseActivity {
-	public static void launch(Context context) {
-		if (null != context) {
+	public static void launchForResult(BaseFragment fragment, int requestCode){
+		if (null != fragment){
 			Intent intent = new Intent();
-			intent.setClass(context, LottoTypeActivity.class);
-			if (!(context instanceof Activity)) {
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			}
-			context.startActivity(intent);
+			intent.setClass(fragment.requireContext(), LottoTypeActivity.class);
+			fragment.startActivityForResult(intent, requestCode);
 		}
 	}
 	
 	private LottoTypeRecyclerAdapter mRecyclerAdapter;
+	private LoadingView mLoadingView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,8 @@ public class LottoTypeActivity extends BaseActivity {
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.setAdapter(mRecyclerAdapter);
 		
+		mLoadingView = findViewById(R.id.lotto_type_loading);
+		
 		initViewClick();
 	}
 	
@@ -69,25 +71,27 @@ public class LottoTypeActivity extends BaseActivity {
 				SPManager.getInstance().setUserLotteryName(lottoTypeModel.getLottery_name());
 				SPManager.getInstance().setUserLotteryType(lottoTypeModel);
 				
+				setResult(Activity.RESULT_OK);
 				finish();
 			}
 		});
 	}
 	
 	private void initData() {
+		mLoadingView.loading();
 		OkHttpManager.lottoType(new OnJsonCallback<List<LottoTypeModel>>() {
 			@Override
 			public void onFailure(int code, String msg) {
-				finish();
+				mLoadingView.loadFailed();
 			}
 			
 			@Override
 			public void onResponse(List<LottoTypeModel> lottoTypeModels) {
 				if (null != lottoTypeModels && !lottoTypeModels.isEmpty()) {
+					mLoadingView.loadSuccess();
 					mRecyclerAdapter.setDataList(lottoTypeModels, true);
 				} else {
-					SDKManager.toast("请求数据为空，退出重新进入");
-					finish();
+					mLoadingView.loadFailed();
 				}
 			}
 		});
