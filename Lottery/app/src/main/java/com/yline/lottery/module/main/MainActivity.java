@@ -35,10 +35,10 @@ public class MainActivity extends BaseFragmentActivity {
 		}
 	}
 	
-	private ActualFragment mActualFragment;
-	private HistoryFragment mHistoryFragment;
-	private QueryFragment mQueryFragment;
-	private MoreFragment mMoreFragment;
+//	private ActualFragment mActualFragment;
+//	private HistoryFragment mHistoryFragment;
+//	private QueryFragment mQueryFragment;
+//	private MoreFragment mMoreFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +50,10 @@ public class MainActivity extends BaseFragmentActivity {
 	}
 	
 	private void initView() {
-		mActualFragment = new ActualFragment();
-		mHistoryFragment = new HistoryFragment();
-		mQueryFragment = new QueryFragment();
-		mMoreFragment = new MoreFragment();
+		ActualFragment mActualFragment = new ActualFragment();
+		HistoryFragment mHistoryFragment = new HistoryFragment();
+		QueryFragment mQueryFragment = new QueryFragment();
+		MoreFragment mMoreFragment = new MoreFragment();
 		
 		ViewPager viewPager = findViewById(R.id.main_view_pager);
 		viewPager.setOffscreenPageLimit(4);

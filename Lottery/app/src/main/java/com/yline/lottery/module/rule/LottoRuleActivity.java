@@ -12,6 +12,7 @@ import com.yline.base.BaseActivity;
 import com.yline.lottery.R;
 import com.yline.lottery.module.type.LottoTypeActivity;
 import com.yline.lottery.sp.SPManager;
+import com.yline.lottery.view.SwitchLottoTypeView;
 
 import java.util.HashSet;
 
@@ -31,7 +32,6 @@ public class LottoRuleActivity extends BaseActivity {
 	private static final String PLS = "pls"; // 排列3
 	private static final String PLW = "plw"; // 排列5
 	
-	private static final String RULE_NAME = "rule_html";
 	// 为了增加遍历速度
 	private static final HashSet<String> hasSet = new HashSet<>();
 	static {
@@ -44,16 +44,10 @@ public class LottoRuleActivity extends BaseActivity {
 		hasSet.add(PLW);
 	}
 	
-	/**
-	 * @param lottoId 介绍的对象
-	 */
-	public static void launch(Context context, String lottoId) {
+	public static void launch(Context context) {
 		if (null != context) {
 			Intent intent = new Intent();
 			intent.setClass(context, LottoRuleActivity.class);
-			if (null != lottoId) {
-				intent.putExtra(RULE_NAME, lottoId);
-			}
 			if (!(context instanceof Activity)) {
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			}
@@ -62,7 +56,7 @@ public class LottoRuleActivity extends BaseActivity {
 	}
 	
 	private WebView mWebView;
-	private View mSwitchView;
+	private SwitchLottoTypeView mSwitchView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,14 +64,10 @@ public class LottoRuleActivity extends BaseActivity {
 		setContentView(R.layout.activity_rule);
 		
 		// 获取 lottoId
+		String lottoId = SPManager.getInstance().getHistoryLotteryId();
 		String fileName = SSQ;
-		Intent intent = getIntent();
-		if (null != intent) {
-			String lottoId = intent.getStringExtra(RULE_NAME);
-			// 如果传入的lottoId支持
-			if (hasSet.contains(lottoId)) {
-				fileName = lottoId;
-			}
+		if (hasSet.contains(lottoId)) {
+			fileName = lottoId;
 		}
 		
 		initView();
@@ -95,12 +85,13 @@ public class LottoRuleActivity extends BaseActivity {
 		mSwitchView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LottoTypeActivity.launchForResult(LottoRuleActivity.this, REQUEST_CODE_SWITCH);
+				LottoTypeActivity.launchForResult(LottoRuleActivity.this, REQUEST_CODE_SWITCH, LottoTypeActivity.FROM_RULE);
 			}
 		});
 	}
 	
 	private void initData(String fileName) {
+		mSwitchView.updateData(LottoTypeActivity.FROM_RULE);
 		mWebView.loadUrl("file:///android_asset/rule/" + fileName + ".html");
 	}
 	
@@ -109,9 +100,10 @@ public class LottoRuleActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_CODE_SWITCH) {
 			if (resultCode == Activity.RESULT_OK) {
-				String fileName = SPManager.getInstance().getUserLotteryId();
+				String fileName = SPManager.getInstance().getRuleLotteryId();
 				if (!TextUtils.isEmpty(fileName)) {
 					initData(fileName);
+					mSwitchView.updateData(LottoTypeActivity.FROM_RULE);
 				}
 			}
 		}

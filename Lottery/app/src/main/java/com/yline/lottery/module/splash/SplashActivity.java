@@ -53,6 +53,7 @@ public class SplashActivity extends BaseActivity {
 				}
 			}, 1000);
 		} else {
+			// 次数超时也是如此啊
 			OkHttpManager.lottoType(new OnJsonCallback<List<LottoTypeModel>>() {
 				@Override
 				public void onFailure(int code, String msg) {
@@ -61,6 +62,7 @@ public class SplashActivity extends BaseActivity {
 						SDKManager.toast("首次安装请打开网络");
 					}
 					finish();
+					MainActivity.launch(SplashActivity.this);
 				}
 				
 				@Override

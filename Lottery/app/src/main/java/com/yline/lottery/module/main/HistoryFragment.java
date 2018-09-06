@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yline.application.SDKManager;
 import com.yline.base.BaseFragment;
 import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
@@ -25,6 +26,9 @@ import com.yline.lottery.view.LoadingView;
 import com.yline.utils.LogUtil;
 import com.yline.view.recycler.adapter.AbstractHeadFootRecyclerAdapter;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
+import com.yline.view.refresh.PullToRefreshLayout;
+import com.yline.view.refresh.callback.OnLoadMoreListener;
+import com.yline.view.refresh.callback.OnRefreshListener;
 
 /**
  * 首页 - 历史
@@ -39,8 +43,9 @@ public class HistoryFragment extends BaseFragment {
 	private HistoryRecyclerAdapter mRecyclerAdapter;
 	private SwitchLottoTypeView mHeaderView;
 	private LoadingView mLoadingView;
+	private PullToRefreshLayout mRefreshLayout;
 	
-	private int pageNum;
+	private int pageNum; // 居然是1开始，每次回来都需要加1；接口的奇葩啊
 	
 	@Nullable
 	@Override
@@ -65,6 +70,7 @@ public class HistoryFragment extends BaseFragment {
 		mHeaderView = new SwitchLottoTypeView(getActivity());
 		mRecyclerAdapter.addHeadView(mHeaderView);
 		
+		mRefreshLayout = view.findViewById(R.id.history_refresh);
 		mLoadingView = view.findViewById(R.id.history_loading);
 		
 		initViewClick();
@@ -75,7 +81,7 @@ public class HistoryFragment extends BaseFragment {
 		mHeaderView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LottoTypeActivity.launchForResult(HistoryFragment.this, REQUEST_CODE_SWITCH);
+				LottoTypeActivity.launchForResult(HistoryFragment.this, REQUEST_CODE_SWITCH, LottoTypeActivity.FROM_HISTORY);
 			}
 		});
 		
@@ -86,15 +92,46 @@ public class HistoryFragment extends BaseFragment {
 				initData();
 			}
 		});
+		
+		// 下拉刷新
+		mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+			@Override
+			public void refresh() {
+				if (mRecyclerAdapter.getItemCount() != 0) { // 数据不为空，伪刷新
+					SDKManager.getHandler().postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							SDKManager.toast("已经是最新了");
+							mRefreshLayout.finishRefresh();
+						}
+					}, 1000);
+				} else { // 数据为空，重新加载
+					initData();
+				}
+			}
+		});
+		
+		// 上拉加载
+		mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+			@Override
+			public void loadMore() {
+				loadMoreData();
+			}
+		});
 	}
 	
+	/**
+	 * 首次加载
+	 */
 	private void initData() {
+		mHeaderView.updateData(LottoTypeActivity.FROM_HISTORY);
+		
 		mLoadingView.loading();
 		
-		String lottoId = SPManager.getInstance().getUserLotteryId();
+		String lottoId = SPManager.getInstance().getHistoryLotteryId();
 		lottoId = TextUtils.isEmpty(lottoId) ? SPManager.getInstance().getLottoTypeFirstId() : lottoId; // 查询太复杂
 		
-		pageNum = 0;
+		pageNum = 1;
 		OkHttpManager.lottoQueryHistory(lottoId, PAGE_SIZE, pageNum, new OnJsonCallback<LottoHistoryModel>() {
 			@Override
 			public void onFailure(int code, String msg) {
@@ -106,10 +143,36 @@ public class HistoryFragment extends BaseFragment {
 				if (null != lottoHistoryModel) {
 					mLoadingView.loadSuccess();
 					
-					pageNum = lottoHistoryModel.getPage();
+					pageNum = lottoHistoryModel.getPage() + 1;
 					mRecyclerAdapter.setDataList(lottoHistoryModel.getLotteryResList(), true);
 				} else {
 					mLoadingView.loadFailed();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * 加载更多
+	 */
+	private void loadMoreData() {
+		String lottoId = SPManager.getInstance().getHistoryLotteryId();
+		lottoId = TextUtils.isEmpty(lottoId) ? SPManager.getInstance().getLottoTypeFirstId() : lottoId; // 查询太复杂
+		
+		OkHttpManager.lottoQueryHistory(lottoId, PAGE_SIZE, pageNum, new OnJsonCallback<LottoHistoryModel>() {
+			@Override
+			public void onFailure(int code, String msg) {
+				// do nothing
+				mRefreshLayout.finishLoadMore();
+			}
+			
+			@Override
+			public void onResponse(LottoHistoryModel lottoHistoryModel) {
+				mRefreshLayout.finishLoadMore();
+				
+				if (null != lottoHistoryModel) {
+					pageNum = lottoHistoryModel.getPage() + 1;
+					mRecyclerAdapter.addAll(lottoHistoryModel.getLotteryResList(), true);
 				}
 			}
 		});
@@ -122,6 +185,7 @@ public class HistoryFragment extends BaseFragment {
 		if (requestCode == REQUEST_CODE_SWITCH) {
 			if (resultCode == Activity.RESULT_OK) { // 切换成功，则重新加载数据
 				initData();
+				mHeaderView.updateData(LottoTypeActivity.FROM_HISTORY);
 			}
 		}
 	}

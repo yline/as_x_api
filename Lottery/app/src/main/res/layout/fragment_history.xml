@@ -4,10 +4,16 @@
     android:layout_height="match_parent">
 
     <!-- 下拉刷新，上拉加载更多 -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/history_recycler"
+    <com.yline.view.refresh.PullToRefreshLayout
+        android:id="@+id/history_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/history_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.yline.view.refresh.PullToRefreshLayout>
 
     <com.yline.lottery.view.LoadingView
         android:id="@+id/history_loading"

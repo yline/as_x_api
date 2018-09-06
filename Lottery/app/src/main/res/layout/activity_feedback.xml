@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/feedback_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="说明：1，个人开发；2，联系方式957339173@qq.com" />
+
+        <EditText
+            android:id="@+id/feedback_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/feedback_hint"
+            android:layout_marginTop="10dp"
+            android:gravity="start|top"
+            android:minLines="5" />
+
+        <EditText
+            android:id="@+id/feedback_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/feedback_info"
+            android:layout_marginTop="10dp"
+            android:hint="联系方式"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/feedback_send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/feedback_contact"
+            android:text="发送" />
+    </RelativeLayout>
+</ScrollView>

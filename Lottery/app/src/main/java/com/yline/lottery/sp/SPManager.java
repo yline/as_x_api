@@ -144,30 +144,57 @@ public class SPManager {
 	}
 	
 	/* -------------------------历史查询，切换默认的彩种展示--------------------------- */
-	public String getUserLotteryId() {
-		return (String) SPUtil.get(SDKManager.getApplication(), Key.UserLotteryId, "");
+	public String getHistoryLotteryId() {
+		return (String) SPUtil.get(SDKManager.getApplication(), Key.HistoryLotteryId, "");
 	}
 	
-	public void setUserLotteryId(String lotteryId) {
-		SPUtil.put(SDKManager.getApplication(), Key.UserLotteryId, lotteryId);
+	public void setHistoryLotteryId(String lotteryId) {
+		SPUtil.put(SDKManager.getApplication(), Key.HistoryLotteryId, lotteryId);
 	}
 	
-	public String getUserLotteryName(){
-		return (String) SPUtil.get(SDKManager.getApplication(), Key.UserLotteryName, "");
+	public String getHistoryLotteryName(){
+		return (String) SPUtil.get(SDKManager.getApplication(), Key.HistoryLotteryName, "");
 	}
 	
-	public void setUserLotteryName(String lotteryName){
-		SPUtil.put(SDKManager.getApplication(), Key.UserLotteryName, lotteryName);
+	public void setHistoryLotteryName(String lotteryName){
+		SPUtil.put(SDKManager.getApplication(), Key.HistoryLotteryName, lotteryName);
 	}
 	
-	public LottoTypeModel getUserLotteryType() {
-		String typeString = (String) SPUtil.get(SDKManager.getApplication(), Key.UserLotteryType, "");
+	public LottoTypeModel getHistoryLotteryType() {
+		String typeString = (String) SPUtil.get(SDKManager.getApplication(), Key.HistoryLotteryType, "");
 		return FastJson.toClass(typeString, LottoTypeModel.class);
 	}
 	
-	public void setUserLotteryType(LottoTypeModel typeModel) {
+	public void setHistoryLotteryType(LottoTypeModel typeModel) {
 		String typeString = FastJson.toString(typeModel);
-		SPUtil.put(SDKManager.getApplication(), Key.UserLotteryType, typeString);
+		SPUtil.put(SDKManager.getApplication(), Key.HistoryLotteryType, typeString);
+	}
+	
+	/* -------------------------规则查询，切换默认的彩种展示--------------------------- */
+	public String getRuleLotteryId() {
+		return (String) SPUtil.get(SDKManager.getApplication(), Key.RuleLotteryId, "");
+	}
+	
+	public void setRuleLotteryId(String lotteryId) {
+		SPUtil.put(SDKManager.getApplication(), Key.RuleLotteryId, lotteryId);
+	}
+	
+	public String getRuleLotteryName(){
+		return (String) SPUtil.get(SDKManager.getApplication(), Key.RuleLotteryName, "");
+	}
+	
+	public void setRuleLotteryName(String lotteryName){
+		SPUtil.put(SDKManager.getApplication(), Key.RuleLotteryName, lotteryName);
+	}
+	
+	public LottoTypeModel getRuleLotteryType() {
+		String typeString = (String) SPUtil.get(SDKManager.getApplication(), Key.RuleLotteryType, "");
+		return FastJson.toClass(typeString, LottoTypeModel.class);
+	}
+	
+	public void setRuleLotteryType(LottoTypeModel typeModel) {
+		String typeString = FastJson.toString(typeModel);
+		SPUtil.put(SDKManager.getApplication(), Key.RuleLotteryType, typeString);
 	}
 	
 	private static class Key {
@@ -186,8 +213,13 @@ public class SPManager {
 		private static final String ActualDate = "actual_date_"; // 开奖日期
 		
 		// 历史查询，切换默认的彩种展示
-		private static final String UserLotteryId = "user_lottery_id";
-		private static final String UserLotteryName = "user_lottery_name";
-		private static final String UserLotteryType = "user_lottery_type";
+		private static final String HistoryLotteryId = "history_lottery_id";
+		private static final String HistoryLotteryName = "history_lottery_name";
+		private static final String HistoryLotteryType = "history_lottery_type";
+		
+		// 规则查询，切换默认的彩种展示
+		private static final String RuleLotteryId = "rule_lottery_id";
+		private static final String RuleLotteryName = "rule_lottery_name";
+		private static final String RuleLotteryType = "rule_lottery_type";
 	}
 }

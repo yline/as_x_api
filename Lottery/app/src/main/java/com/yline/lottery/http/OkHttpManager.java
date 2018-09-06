@@ -32,6 +32,7 @@ public class OkHttpManager {
 	
 	/**
 	 * 历史开奖结果查询
+	 * 居然是1开始，每次回来都需要加1；接口的奇葩啊
 	 *
 	 * @param lotteryId 彩票种类 id
 	 * @param pageSize  每次返回条数，默认10，最大50

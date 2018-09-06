@@ -1,7 +1,6 @@
 package com.yline.lottery.module.type;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,7 +18,7 @@ import com.yline.lottery.http.model.LottoTypeModel;
 import com.yline.lottery.sp.SPManager;
 import com.yline.lottery.view.LoadingView;
 import com.yline.view.recycler.adapter.AbstractRecyclerAdapter;
-import com.yline.view.recycler.holder.Callback;
+import com.yline.view.recycler.callback.OnRecyclerItemClickListener;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
 
 import java.util.List;
@@ -30,29 +29,38 @@ import java.util.List;
  * @author yline 2018/9/3 -- 17:23
  */
 public class LottoTypeActivity extends BaseActivity {
-	public static void launchForResult(Activity activity, int requestCode) {
+	private static final String LAUNCH_FROM = "launch_from";
+	public static final int FROM_HISTORY = 1;
+	public static final int FROM_RULE = 2;
+	
+	public static void launchForResult(Activity activity, int requestCode, int from) {
 		if (null != activity) {
 			Intent intent = new Intent();
 			intent.setClass(activity, LottoTypeActivity.class);
+			intent.putExtra(LAUNCH_FROM, from);
 			activity.startActivityForResult(intent, requestCode);
 		}
 	}
 	
-	public static void launchForResult(BaseFragment fragment, int requestCode) {
+	public static void launchForResult(BaseFragment fragment, int requestCode, int from) {
 		if (null != fragment) {
 			Intent intent = new Intent();
 			intent.setClass(fragment.requireContext(), LottoTypeActivity.class);
+			intent.putExtra(LAUNCH_FROM, from);
 			fragment.startActivityForResult(intent, requestCode);
 		}
 	}
 	
 	private LottoTypeRecyclerAdapter mRecyclerAdapter;
 	private LoadingView mLoadingView;
+	private int from;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lotto_type);
+		
+		from = getIntent().getIntExtra(LAUNCH_FROM, FROM_HISTORY);
 		
 		initView();
 		initData();
@@ -70,14 +78,25 @@ public class LottoTypeActivity extends BaseActivity {
 	}
 	
 	private void initViewClick() {
-		mRecyclerAdapter.setOnItemClickListener(new Callback.OnRecyclerItemClickListener<LottoTypeModel>() {
+		mRecyclerAdapter.setOnItemClickListener(new OnRecyclerItemClickListener<LottoTypeModel>() {
 			@Override
 			public void onItemClick(RecyclerViewHolder viewHolder, LottoTypeModel lottoTypeModel, int position) {
 				SDKManager.toast("选择成功");
 				
-				SPManager.getInstance().setUserLotteryId(lottoTypeModel.getLottery_id());
-				SPManager.getInstance().setUserLotteryName(lottoTypeModel.getLottery_name());
-				SPManager.getInstance().setUserLotteryType(lottoTypeModel);
+				switch (from) {
+					case FROM_HISTORY:
+						SPManager.getInstance().setHistoryLotteryId(lottoTypeModel.getLottery_id());
+						SPManager.getInstance().setHistoryLotteryName(lottoTypeModel.getLottery_name());
+						SPManager.getInstance().setHistoryLotteryType(lottoTypeModel);
+						break;
+					case FROM_RULE:
+						SPManager.getInstance().setRuleLotteryId(lottoTypeModel.getLottery_id());
+						SPManager.getInstance().setRuleLotteryName(lottoTypeModel.getLottery_name());
+						SPManager.getInstance().setRuleLotteryType(lottoTypeModel);
+						break;
+					default:
+						break;
+				}
 				
 				setResult(Activity.RESULT_OK);
 				finish();
@@ -106,7 +125,7 @@ public class LottoTypeActivity extends BaseActivity {
 	}
 	
 	private class LottoTypeRecyclerAdapter extends AbstractRecyclerAdapter<LottoTypeModel> {
-		private Callback.OnRecyclerItemClickListener<LottoTypeModel> itemClickListener;
+		private OnRecyclerItemClickListener<LottoTypeModel> itemClickListener;
 		
 		@Override
 		public int getItemRes() {
@@ -129,7 +148,7 @@ public class LottoTypeActivity extends BaseActivity {
 			});
 		}
 		
-		private void setOnItemClickListener(Callback.OnRecyclerItemClickListener<LottoTypeModel> itemClickListener) {
+		private void setOnItemClickListener(OnRecyclerItemClickListener<LottoTypeModel> itemClickListener) {
 			this.itemClickListener = itemClickListener;
 		}
 	}

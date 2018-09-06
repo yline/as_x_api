@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yline.application.SDKManager;
 import com.yline.base.BaseFragment;
 import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
@@ -20,6 +21,8 @@ import com.yline.lottery.view.LoadingView;
 import com.yline.utils.LogUtil;
 import com.yline.view.recycler.adapter.AbstractRecyclerAdapter;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
+import com.yline.view.refresh.PullToRefreshLayout;
+import com.yline.view.refresh.callback.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +40,7 @@ import java.util.Locale;
 public class ActualFragment extends BaseFragment {
 	private ActualRecyclerAdapter mRecyclerAdapter;
 	private LoadingView mLoadingView;
+	private PullToRefreshLayout mRefreshLayout;
 	
 	private int callbackCount;
 	private List<ActualModel> mActualModelList = new ArrayList<>();
@@ -62,16 +66,39 @@ public class ActualFragment extends BaseFragment {
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerView.setAdapter(mRecyclerAdapter);
 		
+		mRefreshLayout = view.findViewById(R.id.actual_refresh);
+		mRefreshLayout.setCanLoadMore(false);
 		mLoadingView = view.findViewById(R.id.actual_loading);
 		
 		initViewClick();
 	}
 	
 	private void initViewClick() {
+		// 重新加载
 		mLoadingView.setOnReloadClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				initData();
+			}
+		});
+		
+		// 下拉刷新
+		mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+			@Override
+			public void refresh() {
+				int itemCount = mRecyclerAdapter.getItemCount();
+				int valueCount = SPManager.getInstance().getLottoTypeCount();
+				if (itemCount == valueCount) { // 数据够了
+					SDKManager.getHandler().postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							SDKManager.toast("已经是最新了");
+							mRefreshLayout.finishRefresh();
+						}
+					}, 1000);
+				} else {
+					initData(); // 重新加载
+				}
 			}
 		});
 	}
@@ -123,8 +150,10 @@ public class ActualFragment extends BaseFragment {
 		if (callbackCount == SPManager.getInstance().getLottoTypeCount()) {
 			if (mActualModelList.isEmpty()) {
 				mLoadingView.loadFailed();
+				//mRefreshLayout.finishRefresh();
 			} else {
 				mLoadingView.loadSuccess();
+				//mRefreshLayout.finishRefresh();
 				mRecyclerAdapter.setDataList(mActualModelList, true);
 			}
 		}

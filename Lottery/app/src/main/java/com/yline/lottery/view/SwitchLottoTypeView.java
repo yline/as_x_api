@@ -1,12 +1,15 @@
 package com.yline.lottery.view;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.yline.lottery.R;
+import com.yline.lottery.module.type.LottoTypeActivity;
 import com.yline.lottery.sp.SPManager;
 
 /**
@@ -30,23 +33,34 @@ public class SwitchLottoTypeView extends RelativeLayout {
 		LayoutInflater.from(context).inflate(R.layout.view_switch_lotto_type, this, true);
 		
 		initView();
-		initData();
 	}
 	
 	private void initView() {
 		nowTypeTextView = findViewById(R.id.view_switch_lotto_type_now);
 	}
 	
-	private void initData() {
-		String nowLottoName = SPManager.getInstance().getUserLotteryName();
-		nowTypeTextView.setText(String.format("当前类型：%s", nowLottoName));
-	}
-	
 	/**
-	 * 重新更新显示内容
-	 * 需要给SP重新设置值
+	 * 设置当前展示数据
+	 *
+	 * @param type 当前类型
 	 */
-	public void updateData() {
-		initData();
+	public void updateData(int type) {
+		String lottoName = null;
+		switch (type) {
+			case LottoTypeActivity.FROM_HISTORY:
+				lottoName = SPManager.getInstance().getHistoryLotteryName();
+				break;
+			case LottoTypeActivity.FROM_RULE:
+				lottoName = SPManager.getInstance().getRuleLotteryName();
+				break;
+			default:
+				break;
+		}
+		
+		if (TextUtils.isEmpty(lottoName)) {
+			String lottoId = SPManager.getInstance().getLottoTypeFirstId();
+			lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
+		}
+		nowTypeTextView.setText(String.format("当前类型：%s", lottoName));
 	}
 }

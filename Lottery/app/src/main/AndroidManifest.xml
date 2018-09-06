@@ -34,6 +34,7 @@
         <activity android:name=".module.type.LottoTypeActivity" />
         <activity android:name=".module.rule.LottoRuleActivity" />
         <activity android:name=".module.reward.LottoRewardActivity" />
+        <activity android:name=".module.feedback.FeedbackActivity" />
 
         <!-- Bugly 配置APP渠道号，配置在这里，方便多渠道打包 -->
         <meta-data
