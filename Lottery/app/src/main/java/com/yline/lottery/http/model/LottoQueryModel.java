@@ -21,7 +21,7 @@ public class LottoQueryModel implements Serializable {
 		private static final long serialVersionUID = -818954397128537626L;
 		
 		private String prize_name; // 奖项名称
-		private int prize_num; // 中奖数量，公布数据可能延时可能为空或--
+		private String prize_num; // 中奖数量，公布数据可能延时可能为空或--
 		private String prize_amount; // 中奖金额 "7,676,997",
 		private String prize_require; // 	中奖条件 "6+1"
 		
@@ -33,11 +33,11 @@ public class LottoQueryModel implements Serializable {
 			this.prize_name = prize_name;
 		}
 		
-		public int getPrize_num() {
+		public String getPrize_num() {
 			return prize_num;
 		}
 		
-		public void setPrize_num(int prize_num) {
+		public void setPrize_num(String prize_num) {
 			this.prize_num = prize_num;
 		}
 		

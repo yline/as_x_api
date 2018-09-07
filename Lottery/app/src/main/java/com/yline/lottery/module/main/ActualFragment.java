@@ -16,10 +16,12 @@ import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.http.model.LottoQueryModel;
 import com.yline.lottery.module.main.model.ActualModel;
+import com.yline.lottery.module.reward.LottoRewardActivity;
 import com.yline.lottery.sp.SPManager;
 import com.yline.lottery.view.LoadingView;
 import com.yline.utils.LogUtil;
 import com.yline.view.recycler.adapter.AbstractRecyclerAdapter;
+import com.yline.view.recycler.callback.OnRecyclerItemClickListener;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
 import com.yline.view.refresh.PullToRefreshLayout;
 import com.yline.view.refresh.callback.OnRefreshListener;
@@ -101,6 +103,14 @@ public class ActualFragment extends BaseFragment {
 				}
 			}
 		});
+		
+		// item点击
+		mRecyclerAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener<ActualModel>() {
+			@Override
+			public void onItemClick(RecyclerViewHolder viewHolder, ActualModel actualModel, int position) {
+				LottoRewardActivity.launch(getActivity(), actualModel.getLottoId(), actualModel.getNumber());
+			}
+		});
 	}
 	
 	/**
@@ -150,24 +160,26 @@ public class ActualFragment extends BaseFragment {
 		if (callbackCount == SPManager.getInstance().getLottoTypeCount()) {
 			if (mActualModelList.isEmpty()) {
 				mLoadingView.loadFailed();
-				//mRefreshLayout.finishRefresh();
+				mRefreshLayout.finishRefresh();
 			} else {
 				mLoadingView.loadSuccess();
-				//mRefreshLayout.finishRefresh();
+				mRefreshLayout.finishRefresh();
 				mRecyclerAdapter.setDataList(mActualModelList, true);
 			}
 		}
 	}
 	
 	private class ActualRecyclerAdapter extends AbstractRecyclerAdapter<ActualModel> {
+		private OnRecyclerItemClickListener<ActualModel> listener;
+		
 		@Override
 		public int getItemRes() {
 			return R.layout.item_fragment_actual;
 		}
 		
 		@Override
-		public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-			ActualModel actualModel = get(position);
+		public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, int position) {
+			final ActualModel actualModel = get(position);
 			
 			String lottoId = actualModel.getLottoId();
 			String lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
@@ -175,6 +187,19 @@ public class ActualFragment extends BaseFragment {
 			holder.setText(R.id.item_actual_info, info);
 			
 			holder.setText(R.id.item_actual_number, actualModel.getResult());
+			
+			holder.getItemView().setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (null != listener) {
+						listener.onItemClick(holder, actualModel, holder.getAdapterPosition());
+					}
+				}
+			});
+		}
+		
+		private void setOnRecyclerItemClickListener(OnRecyclerItemClickListener<ActualModel> listener) {
+			this.listener = listener;
 		}
 	}
 	

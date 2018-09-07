@@ -14,6 +14,7 @@ import java.util.Map;
 public class OkHttpManager {
 	/**
 	 * 中奖计算器
+	 * 吃力不讨好~~~，暂时不做
 	 *
 	 * @param lotteryId  彩票ID
 	 * @param lotteryNum 开奖期数，默认最新一期
