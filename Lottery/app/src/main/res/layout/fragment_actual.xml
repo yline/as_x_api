@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:id="@+id/actual_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="15dp"
+            android:text="最新"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+    </RelativeLayout>
 
     <com.yline.view.refresh.PullToRefreshLayout
         android:id="@+id/actual_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/actual_title">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/actual_recycler"
@@ -18,5 +36,6 @@
         android:id="@+id/actual_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/actual_title"
         android:visibility="gone" />
 </RelativeLayout>
