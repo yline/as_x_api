@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,7 +13,12 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/history_recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:fastScrollEnabled="true"
+            app:fastScrollHorizontalThumbDrawable="@drawable/recycler_fast_thumb"
+            app:fastScrollHorizontalTrackDrawable="@drawable/recycler_fast_track"
+            app:fastScrollVerticalThumbDrawable="@drawable/recycler_fast_thumb"
+            app:fastScrollVerticalTrackDrawable="@drawable/recycler_fast_track" />
     </com.yline.view.refresh.PullToRefreshLayout>
 
     <com.yline.lottery.view.LoadingView

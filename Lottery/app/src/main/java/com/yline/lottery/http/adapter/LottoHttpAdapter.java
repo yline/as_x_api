@@ -9,6 +9,7 @@ import com.yline.http.adapter.OnHttpAdapter;
 import com.yline.http.adapter.helper.ClientHelper;
 import com.yline.http.callback.OnParseCallback;
 import com.yline.http.json.FastJson;
+import com.yline.lottery.http.manager.DefaultClientHelper;
 import com.yline.lottery.http.manager.FailureManager;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class LottoHttpAdapter implements OnHttpAdapter {
 	
 	@Override
 	public OkHttpClient getHttpClient() {
-		return ClientHelper.getDefaultHttpClient();
+		return DefaultClientHelper.getDefaultHttpClient();
 	}
 	
 	@Override

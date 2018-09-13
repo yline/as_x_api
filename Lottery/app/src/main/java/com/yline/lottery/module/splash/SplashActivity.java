@@ -2,6 +2,7 @@ package com.yline.lottery.module.splash;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.ImageView;
 
 import com.yline.application.SDKManager;
 import com.yline.base.BaseActivity;
@@ -11,6 +12,7 @@ import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.http.model.LottoTypeModel;
 import com.yline.lottery.module.main.MainActivity;
 import com.yline.lottery.sp.SPManager;
+import com.yline.test.StrConstant;
 
 import java.util.Calendar;
 import java.util.List;
@@ -32,6 +34,9 @@ public class SplashActivity extends BaseActivity {
 	}
 	
 	private void initView() {
+		ImageView imageView = findViewById(R.id.splash_view);
+		int[] photoArray = {R.drawable.duling_1, R.drawable.duling_2, R.drawable.duling_3, R.drawable.duling_4, R.drawable.duling_4};
+		imageView.setImageResource(photoArray[StrConstant.getIntRandom(Integer.MAX_VALUE) % 5]);
 		
 		initViewClick();
 	}

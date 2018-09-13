@@ -19,6 +19,7 @@ import com.yline.lottery.module.main.model.ActualModel;
 import com.yline.lottery.module.reward.LottoRewardActivity;
 import com.yline.lottery.sp.SPManager;
 import com.yline.lottery.view.LoadingView;
+import com.yline.lottery.view.TextCircleLayout;
 import com.yline.utils.LogUtil;
 import com.yline.view.recycler.adapter.AbstractRecyclerAdapter;
 import com.yline.view.recycler.callback.OnRecyclerItemClickListener;
@@ -180,13 +181,17 @@ public class ActualFragment extends BaseFragment {
 		@Override
 		public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, int position) {
 			final ActualModel actualModel = get(position);
-			
 			String lottoId = actualModel.getLottoId();
-			String lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
-			String info = String.format("%s  第%s期  开奖：%s", lottoName, actualModel.getNumber(), actualModel.getDate());
-			holder.setText(R.id.item_actual_info, info);
 			
-			holder.setText(R.id.item_actual_number, actualModel.getResult());
+			String lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
+			holder.setText(R.id.item_actual_name, lottoName);
+			
+			holder.setText(R.id.item_actual_term, String.format(("第%s期"), actualModel.getNumber()));
+			
+			holder.setText(R.id.item_actual_time, actualModel.getDate());
+			
+			TextCircleLayout circleLayout = holder.get(R.id.item_actual_number);
+			circleLayout.setText(actualModel.getResult(), lottoId);
 			
 			holder.getItemView().setOnClickListener(new View.OnClickListener() {
 				@Override

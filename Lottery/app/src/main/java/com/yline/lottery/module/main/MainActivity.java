@@ -35,11 +35,6 @@ public class MainActivity extends BaseFragmentActivity {
 		}
 	}
 	
-//	private ActualFragment mActualFragment;
-//	private HistoryFragment mHistoryFragment;
-//	private QueryFragment mQueryFragment;
-//	private MoreFragment mMoreFragment;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,7 +47,6 @@ public class MainActivity extends BaseFragmentActivity {
 	private void initView() {
 		ActualFragment mActualFragment = new ActualFragment();
 		HistoryFragment mHistoryFragment = new HistoryFragment();
-		QueryFragment mQueryFragment = new QueryFragment();
 		MoreFragment mMoreFragment = new MoreFragment();
 		
 		ViewPager viewPager = findViewById(R.id.main_view_pager);
@@ -63,8 +57,8 @@ public class MainActivity extends BaseFragmentActivity {
 		viewPager.setAdapter(pagerAdapter);
 		tabLayout.setupWithViewPager(viewPager);
 		
-		pagerAdapter.setViewList(new String[]{"最新", "历史", "查询", "更多"},
-				new Fragment[]{mActualFragment, mHistoryFragment, mQueryFragment, mMoreFragment});
+		pagerAdapter.setViewList(new String[]{"最新", "历史", "更多"},
+				new Fragment[]{mActualFragment, mHistoryFragment, mMoreFragment});
 		
 		initViewClick();
 	}

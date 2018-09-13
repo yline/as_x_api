@@ -20,4 +20,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/main_tab" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@id/main_tab"
+        android:background="@color/gray_e6" />
 </RelativeLayout>
