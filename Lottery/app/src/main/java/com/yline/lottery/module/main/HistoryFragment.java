@@ -20,6 +20,8 @@ import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.http.model.LottoHistoryModel;
+import com.yline.lottery.module.main.model.ActualModel;
+import com.yline.lottery.module.reward.LottoRewardActivity;
 import com.yline.lottery.view.SwitchLottoTypeView;
 import com.yline.lottery.module.type.LottoTypeActivity;
 import com.yline.lottery.sp.SPManager;
@@ -27,6 +29,7 @@ import com.yline.lottery.view.LoadingView;
 import com.yline.lottery.view.TextCircleLayout;
 import com.yline.utils.LogUtil;
 import com.yline.view.recycler.adapter.AbstractHeadFootRecyclerAdapter;
+import com.yline.view.recycler.callback.OnRecyclerItemClickListener;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
 import com.yline.view.refresh.PullToRefreshLayout;
 import com.yline.view.refresh.callback.OnLoadMoreListener;
@@ -123,6 +126,17 @@ public class HistoryFragment extends BaseFragment {
 				loadMoreData();
 			}
 		});
+		
+		// 点击item
+		mRecyclerAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener<LottoHistoryModel.HistoryDetail>() {
+			@Override
+			public void onItemClick(RecyclerViewHolder viewHolder, LottoHistoryModel.HistoryDetail historyDetail, int position) {
+				String lottoId = historyDetail.getLottery_id();
+				String lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
+				
+				LottoRewardActivity.launch(getActivity(), lottoId, historyDetail.getLottery_no(), lottoName);
+			}
+		});
 	}
 	
 	/**
@@ -205,6 +219,8 @@ public class HistoryFragment extends BaseFragment {
 	}
 	
 	private class HistoryRecyclerAdapter extends AbstractHeadFootRecyclerAdapter<LottoHistoryModel.HistoryDetail> {
+		private OnRecyclerItemClickListener<LottoHistoryModel.HistoryDetail> listener;
+		
 		private HistoryRecyclerAdapter(Context context) {
 			super(context);
 		}
@@ -215,14 +231,27 @@ public class HistoryFragment extends BaseFragment {
 		}
 		
 		@Override
-		public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-			LottoHistoryModel.HistoryDetail detailModel = get(position);
+		public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, int position) {
+			final LottoHistoryModel.HistoryDetail detailModel = get(position);
 			
 			holder.setText(R.id.item_history_term, String.format("第%s期", detailModel.getLottery_no()));
 			holder.setText(R.id.item_history_time, detailModel.getLottery_date());
 			
 			TextCircleLayout circleLayout = holder.get(R.id.item_history_number);
 			circleLayout.setText(detailModel.getLottery_res(), detailModel.getLottery_id());
+			
+			holder.getItemView().setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (null != listener) {
+						listener.onItemClick(holder, detailModel, holder.getAdapterPosition());
+					}
+				}
+			});
+		}
+		
+		private void setOnRecyclerItemClickListener(OnRecyclerItemClickListener<LottoHistoryModel.HistoryDetail> listener) {
+			this.listener = listener;
 		}
 	}
 }

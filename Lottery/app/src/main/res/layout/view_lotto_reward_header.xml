@@ -4,59 +4,164 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/view_lotto_reward_header_name"
-        android:layout_width="wrap_content"
+    <!-- 日期 -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:text="双色球" />
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
 
-    <TextView
-        android:id="@+id/view_lotto_reward_header_term"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:text="第100期" />
+        <View
+            android:layout_width="2dp"
+            android:layout_height="15dp"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="7dp"
+            android:text="日期"
+            android:textColor="@color/gray_66"
+            android:textSize="12dp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/view_lotto_reward_header_date"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:text="开奖日期" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="left"
+        android:text="开奖"
+        android:textColor="@color/gray_99"
+        android:textSize="13dp" />
 
     <TextView
         android:id="@+id/view_lotto_reward_header_date_exchange"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:text="兑奖日期" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="left"
+        android:text="兑奖"
+        android:textColor="@color/gray_99"
+        android:textSize="13dp" />
 
-    <TextView
-        android:id="@+id/view_lotto_reward_header_result"
-        android:layout_width="wrap_content"
+    <!-- 号码 -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:text="开奖号码" />
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="15dp"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="7dp"
+            android:text="开奖号码"
+            android:textColor="@color/gray_66"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <com.yline.lottery.view.TextCircleLayout
+        android:id="@+id/view_lotto_reward_header_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp" />
+
+    <!-- 金额 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="15dp"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="7dp"
+            android:text="金额"
+            android:textColor="@color/gray_66"
+            android:textSize="12dp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/view_lotto_reward_header_sale"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:text="销售额" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="left"
+        android:text="销售额"
+        android:textColor="@color/gray_99"
+        android:textSize="13dp" />
 
     <TextView
         android:id="@+id/view_lotto_reward_header_pool"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:text="奖池" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="left"
+        android:text="奖池"
+        android:textColor="@color/gray_99"
+        android:textSize="13dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- 开奖详情 -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginTop="10dp"
-        android:text="开奖详情" />
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="15dp"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="7dp"
+            android:text="开奖详情"
+            android:textColor="@color/gray_66"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/item_lotto_reward_container"
+        android:layout_marginTop="8dp"
+        android:background="@color/gray_e6" />
 </LinearLayout>

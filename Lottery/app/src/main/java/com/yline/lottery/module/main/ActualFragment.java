@@ -109,7 +109,9 @@ public class ActualFragment extends BaseFragment {
 		mRecyclerAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener<ActualModel>() {
 			@Override
 			public void onItemClick(RecyclerViewHolder viewHolder, ActualModel actualModel, int position) {
-				LottoRewardActivity.launch(getActivity(), actualModel.getLottoId(), actualModel.getNumber());
+				String lottoId = actualModel.getLottoId();
+				String lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
+				LottoRewardActivity.launch(getActivity(), lottoId, actualModel.getNumber(), lottoName);
 			}
 		});
 	}
