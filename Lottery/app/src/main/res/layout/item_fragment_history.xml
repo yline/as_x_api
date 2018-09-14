@@ -2,23 +2,52 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="10dp"
-    android:paddingLeft="15dp"
-    android:paddingTop="10dp">
+    android:paddingLeft="15dp">
 
-    <!-- 种类 - 第**期 - 开奖：日期 -->
+    <!-- 第**期 - 开奖：日期 -->
     <TextView
-        android:id="@+id/item_history_info"
-        android:layout_width="match_parent"
+        android:id="@+id/item_history_term"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="info" />
+        android:layout_marginTop="10dp"
+        android:text="第18220期"
+        android:textColor="@color/blue_36d"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/item_history_time_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/item_history_term"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/item_history_term"
+        android:text="开奖："
+        android:textColor="@color/gray_99"
+        android:textSize="13dp" />
+
+    <TextView
+        android:id="@+id/item_history_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/item_history_time_hint"
+        android:layout_toRightOf="@id/item_history_time_hint"
+        android:text="2018-09-11"
+        android:textSize="14dp" />
 
     <!-- 123456(颜色需要区分)【一个控件即可】 -->
-    <TextView
+    <com.yline.lottery.view.TextCircleLayout
         android:id="@+id/item_history_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/item_history_info"
+        android:layout_below="@id/item_history_term"
         android:layout_marginTop="6dp"
         android:text="number" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/item_history_number"
+        android:layout_marginTop="15dp"
+        android:background="@color/gray_e6"
+        android:paddingRight="10dp" />
 </RelativeLayout>

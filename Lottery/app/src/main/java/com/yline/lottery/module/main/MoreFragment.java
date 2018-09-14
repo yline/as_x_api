@@ -17,6 +17,7 @@ import com.yline.lottery.http.model.LottoBonusModel;
 import com.yline.lottery.module.feedback.FeedbackActivity;
 import com.yline.lottery.module.main.view.MoreItemView;
 import com.yline.lottery.module.rule.LottoRuleActivity;
+import com.yline.lottery.module.upgrade.UpgradeActivity;
 import com.yline.lottery.sp.SPManager;
 import com.yline.test.BaseTestFragment;
 
@@ -40,10 +41,10 @@ public class MoreFragment extends BaseFragment {
 		ruleItem = view.findViewById(R.id.more_rule);
 		upgradeItem = view.findViewById(R.id.more_upgrade);
 		helpItem = view.findViewById(R.id.more_help);
-		initViewClick(view);
+		initViewClick();
 	}
 	
-	private void initViewClick(View view) {
+	private void initViewClick() {
 		ruleItem.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -54,8 +55,7 @@ public class MoreFragment extends BaseFragment {
 		upgradeItem.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SDKManager.toast("升级");
-				BuglyConfig.checkUpgrade();
+				UpgradeActivity.launch(getActivity());
 			}
 		});
 		
@@ -68,8 +68,8 @@ public class MoreFragment extends BaseFragment {
 	}
 	
 	private void initData() {
-//		ruleItem.setData(); // 规则
-//		upgradeItem.setData(); // 升级
-//		helpItem.setData(); // 帮助与反馈
+		ruleItem.setData(R.drawable.more_item_rule, "规则详解");
+		upgradeItem.setData(R.drawable.more_item_upgrade, "版本升级");
+		helpItem.setData(R.drawable.more_item_help, "意见反馈");
 	}
 }

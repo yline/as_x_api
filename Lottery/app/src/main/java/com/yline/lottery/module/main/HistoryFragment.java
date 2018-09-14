@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.yline.application.SDKManager;
 import com.yline.base.BaseFragment;
@@ -23,6 +24,7 @@ import com.yline.lottery.view.SwitchLottoTypeView;
 import com.yline.lottery.module.type.LottoTypeActivity;
 import com.yline.lottery.sp.SPManager;
 import com.yline.lottery.view.LoadingView;
+import com.yline.lottery.view.TextCircleLayout;
 import com.yline.utils.LogUtil;
 import com.yline.view.recycler.adapter.AbstractHeadFootRecyclerAdapter;
 import com.yline.view.recycler.holder.RecyclerViewHolder;
@@ -42,8 +44,10 @@ public class HistoryFragment extends BaseFragment {
 	
 	private HistoryRecyclerAdapter mRecyclerAdapter;
 	private SwitchLottoTypeView mHeaderView;
-	private LoadingView mLoadingView;
 	private PullToRefreshLayout mRefreshLayout;
+	
+	private LoadingView mLoadingView;
+	private TextView titleTextView;
 	
 	private int pageNum; // 居然是1开始，每次回来都需要加1；接口的奇葩啊
 	
@@ -72,6 +76,7 @@ public class HistoryFragment extends BaseFragment {
 		
 		mRefreshLayout = view.findViewById(R.id.history_refresh);
 		mLoadingView = view.findViewById(R.id.history_loading);
+		titleTextView = view.findViewById(R.id.history_title_content);
 		
 		initViewClick();
 	}
@@ -124,8 +129,7 @@ public class HistoryFragment extends BaseFragment {
 	 * 首次加载
 	 */
 	private void initData() {
-		mHeaderView.updateData(LottoTypeActivity.FROM_HISTORY);
-		
+		updateTitleAndHeader();
 		mLoadingView.loading();
 		
 		String lottoId = SPManager.getInstance().getHistoryLotteryId();
@@ -150,6 +154,17 @@ public class HistoryFragment extends BaseFragment {
 				}
 			}
 		});
+	}
+	
+	private void updateTitleAndHeader() {
+		String lottoName = SPManager.getInstance().getHistoryLotteryName();
+		if (TextUtils.isEmpty(lottoName)) {
+			String lottoId = SPManager.getInstance().getLottoTypeFirstId();
+			lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
+		}
+		
+		titleTextView.setText(String.format("历史—%s", lottoName));
+		mHeaderView.updateData(lottoName);
 	}
 	
 	/**
@@ -185,7 +200,6 @@ public class HistoryFragment extends BaseFragment {
 		if (requestCode == REQUEST_CODE_SWITCH) {
 			if (resultCode == Activity.RESULT_OK) { // 切换成功，则重新加载数据
 				initData();
-				mHeaderView.updateData(LottoTypeActivity.FROM_HISTORY);
 			}
 		}
 	}
@@ -204,12 +218,11 @@ public class HistoryFragment extends BaseFragment {
 		public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
 			LottoHistoryModel.HistoryDetail detailModel = get(position);
 			
-			String lottoId = detailModel.getLottery_id();
-			String lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
-			String info = String.format("%s  第%s期  开奖：%s", lottoName, detailModel.getLottery_no(), detailModel.getLottery_date());
-			holder.setText(R.id.item_history_info, info);
+			holder.setText(R.id.item_history_term, String.format("第%s期", detailModel.getLottery_no()));
+			holder.setText(R.id.item_history_time, detailModel.getLottery_date());
 			
-			holder.setText(R.id.item_history_number, detailModel.getLottery_res());
+			TextCircleLayout circleLayout = holder.get(R.id.item_history_number);
+			circleLayout.setText(detailModel.getLottery_res(), detailModel.getLottery_id());
 		}
 	}
 }

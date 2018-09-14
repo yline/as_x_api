@@ -7,11 +7,20 @@
     android:gravity="center_horizontal">
 
     <TextView
+        android:id="@+id/view_switch_lotto_type_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="当前类型：" />
+
+    <TextView
         android:id="@+id/view_switch_lotto_type_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text="当前类型：双色球" />
+        android:layout_toRightOf="@id/view_switch_lotto_type_hint"
+        android:text="双色球"
+        android:textColor="@color/colorAccent" />
 
     <TextView
         android:layout_width="wrap_content"

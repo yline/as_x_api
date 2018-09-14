@@ -39,28 +39,7 @@ public class SwitchLottoTypeView extends RelativeLayout {
 		nowTypeTextView = findViewById(R.id.view_switch_lotto_type_now);
 	}
 	
-	/**
-	 * 设置当前展示数据
-	 *
-	 * @param type 当前类型
-	 */
-	public void updateData(int type) {
-		String lottoName = null;
-		switch (type) {
-			case LottoTypeActivity.FROM_HISTORY:
-				lottoName = SPManager.getInstance().getHistoryLotteryName();
-				break;
-			case LottoTypeActivity.FROM_RULE:
-				lottoName = SPManager.getInstance().getRuleLotteryName();
-				break;
-			default:
-				break;
-		}
-		
-		if (TextUtils.isEmpty(lottoName)) {
-			String lottoId = SPManager.getInstance().getLottoTypeFirstId();
-			lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
-		}
-		nowTypeTextView.setText(String.format("当前类型：%s", lottoName));
+	public void updateData(String lottoName) {
+		nowTypeTextView.setText(lottoName);
 	}
 }

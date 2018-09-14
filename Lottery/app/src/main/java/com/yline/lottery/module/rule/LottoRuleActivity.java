@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.TextView;
 
 import com.yline.base.BaseActivity;
 import com.yline.lottery.R;
@@ -57,6 +58,7 @@ public class LottoRuleActivity extends BaseActivity {
 	
 	private WebView mWebView;
 	private SwitchLottoTypeView mSwitchView;
+	private TextView titleTextView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,11 +79,19 @@ public class LottoRuleActivity extends BaseActivity {
 	private void initView() {
 		mSwitchView = findViewById(R.id.rule_switch_type);
 		mWebView = findViewById(R.id.rule_webview);
+		titleTextView = findViewById(R.id.rule_title_content);
 		
 		initViewClick();
 	}
 	
 	private void initViewClick() {
+		findViewById(R.id.rule_title_img).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		
 		mSwitchView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -91,7 +101,14 @@ public class LottoRuleActivity extends BaseActivity {
 	}
 	
 	private void initData(String fileName) {
-		mSwitchView.updateData(LottoTypeActivity.FROM_RULE);
+		String lottoName = SPManager.getInstance().getRuleLotteryName();
+		if (TextUtils.isEmpty(lottoName)) {
+			String lottoId = SPManager.getInstance().getLottoTypeFirstId();
+			lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
+		}
+		titleTextView.setText(String.format("规则详解—%s", lottoName));
+		mSwitchView.updateData(lottoName);
+		
 		mWebView.loadUrl("file:///android_asset/rule/" + fileName + ".html");
 	}
 	
@@ -103,7 +120,6 @@ public class LottoRuleActivity extends BaseActivity {
 				String fileName = SPManager.getInstance().getRuleLotteryId();
 				if (!TextUtils.isEmpty(fileName)) {
 					initData(fileName);
-					mSwitchView.updateData(LottoTypeActivity.FROM_RULE);
 				}
 			}
 		}
