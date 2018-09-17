@@ -38,7 +38,7 @@
         android:layout_below="@id/upgrade_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/icon" />
 
     <TextView
         android:id="@+id/upgrade_app_version"
