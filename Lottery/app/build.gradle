@@ -5,7 +5,7 @@ android {
         release {
             keyAlias 'china'
             keyPassword 'ylineyline'
-            storeFile file('F:/git_place/as_lib_sdk/keystore.jks')
+            storeFile file('F:/git_place/as_lib_sdk/yline.jks')
             storePassword 'ylineyline'
         }
     }
@@ -20,6 +20,11 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release

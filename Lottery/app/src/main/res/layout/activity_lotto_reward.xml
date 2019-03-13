@@ -29,6 +29,18 @@
             android:text="双色球—第***期"
             android:textColor="@android:color/white"
             android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/reward_title_rule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:padding="5dp"
+            android:text="查看规则"
+            android:textColor="@android:color/white"
+            android:textSize="15dp" />
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
