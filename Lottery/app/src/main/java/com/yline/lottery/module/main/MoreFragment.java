@@ -19,57 +19,65 @@ import com.yline.lottery.module.main.view.MoreItemView;
 import com.yline.lottery.module.rule.LottoRuleActivity;
 import com.yline.lottery.module.upgrade.UpgradeActivity;
 import com.yline.lottery.sp.SPManager;
+import com.yline.lottery.view.TextCircleLayout;
 import com.yline.test.BaseTestFragment;
+import com.yline.utils.LogUtil;
+
+import java.util.Random;
 
 public class MoreFragment extends BaseFragment {
-	private MoreItemView ruleItem, upgradeItem, helpItem;
-	
-	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_more, container, false);
-	}
-	
-	@Override
-	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		
-		initView(view);
-		initData();
-	}
-	
-	private void initView(View view) {
-		ruleItem = view.findViewById(R.id.more_rule);
-		upgradeItem = view.findViewById(R.id.more_upgrade);
-		helpItem = view.findViewById(R.id.more_help);
-		initViewClick();
-	}
-	
-	private void initViewClick() {
-		ruleItem.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				LottoRuleActivity.launch(getActivity());
-			}
-		});
-		
-		upgradeItem.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				UpgradeActivity.launch(getActivity());
-			}
-		});
-		
-		helpItem.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				FeedbackActivity.launch(getActivity());
-			}
-		});
-	}
-	
-	private void initData() {
-		ruleItem.setData(R.drawable.more_item_rule, "规则详解");
-		upgradeItem.setData(R.drawable.more_item_upgrade, "版本升级");
-		helpItem.setData(R.drawable.more_item_help, "意见反馈");
-	}
+    private MoreItemView ruleItem, upgradeItem, helpItem;
+    private TextCircleLayout mTextCircleLayout;
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_more, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        initView(view);
+        initData();
+    }
+
+    private void initView(View view) {
+        ruleItem = view.findViewById(R.id.more_rule);
+        upgradeItem = view.findViewById(R.id.more_upgrade);
+        helpItem = view.findViewById(R.id.more_help);
+        mTextCircleLayout = view.findViewById(R.id.more_dlt_yline);
+        initViewClick();
+    }
+
+    private void initViewClick() {
+        ruleItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LottoRuleActivity.launch(getActivity());
+            }
+        });
+
+        upgradeItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpgradeActivity.launch(getActivity());
+            }
+        });
+
+        helpItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FeedbackActivity.launch(getActivity());
+            }
+        });
+    }
+
+    private void initData() {
+        ruleItem.setData(R.drawable.more_item_rule, "规则详解");
+        upgradeItem.setData(R.drawable.more_item_upgrade, "版本升级");
+        helpItem.setData(R.drawable.more_item_help, "意见反馈");
+
+        mTextCircleLayout.setText("05,07,09,19,30,02,10", "dlt");
+    }
 }

@@ -18,6 +18,7 @@ import com.yline.lottery.R;
 import com.yline.lottery.http.OkHttpManager;
 import com.yline.lottery.http.model.LottoQueryModel;
 import com.yline.lottery.module.reward.view.LottoRewardHeaderView;
+import com.yline.lottery.module.rule.LottoRuleActivity;
 import com.yline.lottery.view.LoadingView;
 import com.yline.utils.UIScreenUtil;
 import com.yline.view.recycler.adapter.AbstractHeadFootRecyclerAdapter;
@@ -104,6 +105,14 @@ public class LottoRewardActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				finish();
+			}
+		});
+		
+		// 查看规则
+		findViewById(R.id.reward_title_rule).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LottoRuleActivity.launch(LottoRewardActivity.this);
 			}
 		});
 		

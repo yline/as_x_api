@@ -46,10 +46,30 @@
         android:layout_below="@id/more_upgrade" />
 
     <View
+        android:id="@+id/more_help_divider"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:layout_below="@id/more_help"
         android:background="@color/gray_f2" />
+
+    <TextView
+        android:id="@+id/more_dlt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/more_help_divider"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:text="大乐透"
+        android:textColor="@color/gray_66"
+        android:textSize="18dp" />
+
+    <com.yline.lottery.view.TextCircleLayout
+        android:id="@+id/more_dlt_yline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/more_dlt"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
