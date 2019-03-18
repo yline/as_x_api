@@ -2,28 +2,18 @@ package com.yline.lottery.module.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yline.application.SDKManager;
 import com.yline.base.BaseFragment;
-import com.yline.http.callback.OnJsonCallback;
 import com.yline.lottery.R;
-import com.yline.lottery.bugly.BuglyConfig;
-import com.yline.lottery.http.OkHttpManager;
-import com.yline.lottery.http.model.LottoBonusModel;
 import com.yline.lottery.module.feedback.FeedbackActivity;
 import com.yline.lottery.module.main.view.MoreItemView;
 import com.yline.lottery.module.rule.LottoRuleActivity;
 import com.yline.lottery.module.upgrade.UpgradeActivity;
 import com.yline.lottery.sp.SPManager;
 import com.yline.lottery.view.TextCircleLayout;
-import com.yline.test.BaseTestFragment;
-import com.yline.utils.LogUtil;
-
-import java.util.Random;
 
 public class MoreFragment extends BaseFragment {
     private MoreItemView ruleItem, upgradeItem, helpItem;
@@ -54,7 +44,8 @@ public class MoreFragment extends BaseFragment {
         ruleItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LottoRuleActivity.launch(getActivity());
+                String lottoId = SPManager.getInstance().getLastLottoId();
+                LottoRuleActivity.launch(getActivity(), lottoId);
             }
         });
 
