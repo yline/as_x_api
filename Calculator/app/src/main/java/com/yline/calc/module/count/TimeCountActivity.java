@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.yline.application.SDKManager;
 import com.yline.base.BaseActivity;
 import com.yline.calc.R;
 import com.yline.calc.module.count.view.TimeCountView;
 import com.yline.calc.utils.LunarCalendarUtils;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * 时间计数；
@@ -52,8 +54,8 @@ public class TimeCountActivity extends BaseActivity {
 
     private void updateData() {
         if (null != mTimeCountView) {
-            int[] days = LunarCalendarUtils.lunarToSolar(2020, 4, 7, true);
-            mTimeCountView.setData(days[0], days[1], days[2], 8, 0, 0);
+            long diffMillis = getDiffMillisByLunar(2020, 4, 7, true);
+            mTimeCountView.setData(diffMillis);
         }
     }
 
@@ -69,6 +71,18 @@ public class TimeCountActivity extends BaseActivity {
                 dfs();
             }
         }, 1000);
+    }
+
+    private static long getDiffMillisByLunar(int year, int month, int monthDay, boolean isLeapMonth) {
+        int[] days = LunarCalendarUtils.lunarToSolar(year, month, monthDay, isLeapMonth);
+        return getDiffMillis(days[0], days[1], days[2]);
+    }
+
+    private static long getDiffMillis(int year, int month, int monthDay) {
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);
+        calendar.set(year, month, monthDay, 8, 0, 0);
+
+        return calendar.getTimeInMillis() - System.currentTimeMillis();
     }
 
     @Override
