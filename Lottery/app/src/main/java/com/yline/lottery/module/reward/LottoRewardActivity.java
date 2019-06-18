@@ -112,7 +112,7 @@ public class LottoRewardActivity extends BaseActivity {
 		findViewById(R.id.reward_title_rule).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LottoRuleActivity.launch(LottoRewardActivity.this);
+				LottoRuleActivity.launch(LottoRewardActivity.this, mLottoId);
 			}
 		});
 		

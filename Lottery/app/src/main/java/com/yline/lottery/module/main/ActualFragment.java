@@ -18,6 +18,7 @@ import com.yline.lottery.http.model.LottoQueryModel;
 import com.yline.lottery.module.main.model.ActualModel;
 import com.yline.lottery.module.reward.LottoRewardActivity;
 import com.yline.lottery.sp.SPManager;
+import com.yline.lottery.sp.TypeManager;
 import com.yline.lottery.view.LoadingView;
 import com.yline.lottery.view.TextCircleLayout;
 import com.yline.utils.LogUtil;
@@ -90,7 +91,7 @@ public class ActualFragment extends BaseFragment {
 			@Override
 			public void refresh() {
 				int itemCount = mRecyclerAdapter.getItemCount();
-				int valueCount = SPManager.getInstance().getLottoTypeCount();
+				int valueCount = TypeManager.getLottoTypeCount();
 				if (itemCount == valueCount) { // 数据够了
 					SDKManager.getHandler().postDelayed(new Runnable() {
 						@Override
@@ -110,7 +111,7 @@ public class ActualFragment extends BaseFragment {
 			@Override
 			public void onItemClick(RecyclerViewHolder viewHolder, ActualModel actualModel, int position) {
 				String lottoId = actualModel.getLottoId();
-				String lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
+				String lottoName = TypeManager.getTypeNameByLottoId(lottoId);
 				LottoRewardActivity.launch(getActivity(), lottoId, actualModel.getNumber(), lottoName);
 			}
 		});
@@ -124,7 +125,7 @@ public class ActualFragment extends BaseFragment {
 		
 		callbackCount = 0;
 		
-		List<String> idList = SPManager.getInstance().getLottoTypeIdList();
+		List<String> idList = TypeManager.getLottoIdList();
 		for (final String lottoId : idList) {
 			long lastSaveTime = SPManager.getInstance().getActualModelTime(lottoId);
 			boolean isSameDate = isSameDate(lastSaveTime);
@@ -160,7 +161,7 @@ public class ActualFragment extends BaseFragment {
 			mActualModelList.add(ActualModel.genActualModel(lottoId, result, number, date));
 		}
 		
-		if (callbackCount == SPManager.getInstance().getLottoTypeCount()) {
+		if (callbackCount == TypeManager.getLottoTypeCount()) {
 			if (mActualModelList.isEmpty()) {
 				mLoadingView.loadFailed();
 				mRefreshLayout.finishRefresh();
@@ -185,7 +186,7 @@ public class ActualFragment extends BaseFragment {
 			final ActualModel actualModel = get(position);
 			String lottoId = actualModel.getLottoId();
 			
-			String lottoName = SPManager.getInstance().getLottoTypeNameByLottoId(lottoId);
+			String lottoName = TypeManager.getTypeNameByLottoId(lottoId);
 			holder.setText(R.id.item_actual_name, lottoName);
 			
 			holder.setText(R.id.item_actual_term, String.format(("第%s期"), actualModel.getNumber()));
