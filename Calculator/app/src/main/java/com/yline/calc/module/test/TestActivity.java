@@ -41,7 +41,7 @@ public class TestActivity extends BaseTestActivity {
         addButton("倒计时", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimeCountActivity.launch(TestActivity.this);
+                TimeCountActivity.launch(TestActivity.this, "Title", System.currentTimeMillis(), true);
             }
         });
     }
