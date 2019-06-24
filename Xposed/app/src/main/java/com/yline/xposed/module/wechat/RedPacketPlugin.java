@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 
 import com.yline.application.SDKManager;
@@ -16,22 +16,15 @@ import com.yline.xposed.config.SPManager;
 import com.yline.xposed.module.wechat.param.WechatParamModel;
 import com.yline.xposed.utils.VersionUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-
-import static android.text.TextUtils.isEmpty;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.findFirstFieldByExactType;
-import static de.robv.android.xposed.XposedHelpers.newInstance;
 
 /**
  * 抢红包
@@ -39,15 +32,18 @@ import static de.robv.android.xposed.XposedHelpers.newInstance;
  * @author yline 2019/6/24 -- 12:37
  */
 public class RedPacketPlugin implements IPlugin {
-    private static final List<LuckyMoneyModel> mLuckyModelList = new ArrayList<>();
+    private Object mRequestCaller;
+    private final List<LuckyMoneyModel> mLuckyModelList = new ArrayList<>();
+    private boolean mHasTimingIdentifier;
 
     @Override
     public void hook(final XC_LoadPackage.LoadPackageParam lpparam, String versionName) throws Throwable {
+        mHasTimingIdentifier = VersionUtil.redPacketHasTimingIdentifier(versionName);
+
         final String dbClassName = VersionUtil.getDatabaseClassName(versionName);
-        final boolean hasTimingIdentifier = VersionUtil.redPacketHasTimingIdentifier(versionName);
         final String chatroomInfoUIClassName = VersionUtil.redPacketChatroomInfoUIClassName(versionName);
 
-        WechatParamModel paramModel = WechatParamModel.getInstance();
+        final WechatParamModel paramModel = WechatParamModel.getInstance();
 
         XposedHelpers.findAndHookMethod(dbClassName, lpparam.classLoader, "insert",
                 String.class, String.class, ContentValues.class, new XC_MethodHook() {
@@ -64,7 +60,7 @@ public class RedPacketPlugin implements IPlugin {
                             // do nothing
                         } else if (type == 436207665 || type == 469762097) {
                             // 红包处理
-                            handleLuckyMoney(values, lpparam);
+                            handleLuckyMoney(values, lpparam, paramModel);
                         } else if (type == 419430449) {
                             // 转账处理
                             handleTransfer(values, lpparam);
@@ -77,48 +73,43 @@ public class RedPacketPlugin implements IPlugin {
         XposedHelpers.findAndHookMethod(receiveRequestClassName, lpparam.classLoader, receiveRequestMethodName,
                 int.class, String.class, JSONObject.class, new XC_MethodHook() {
                     @Override
-                    protected void beforeHookedMethod(MethodHookParam param) {
-                        try {
-                            if (!hasTimingIdentifier) {
-                                return;
-                            }
-
-                            if (luckyMoneyMessages.size() <= 0) {
-                                return;
-                            }
-
-                            String timingIdentifier = ((JSONObject) (param.args[2])).getString("timingIdentifier");
-                            if (isEmpty(timingIdentifier)) {
-                                return;
-                            }
-                            LuckyMoneyMessage luckyMoneyMessage = luckyMoneyMessages.get(0);
-
-                            Class luckyMoneyRequestClass = XposedHelpers.findClass(HookParams.getInstance().LuckyMoneyRequestClassName, lpparam.classLoader);
-                            Object luckyMoneyRequest = newInstance(luckyMoneyRequestClass,
-                                    luckyMoneyMessage.getMsgType(), luckyMoneyMessage.getChannelId(), luckyMoneyMessage.getSendId(), luckyMoneyMessage.getNativeUrlString(), "", "", luckyMoneyMessage.getTalker(), "v1.0", timingIdentifier);
-                            callMethod(requestCaller, HookParams.getInstance().RequestCallerMethod, luckyMoneyRequest, getDelayTime());
-                            luckyMoneyMessages.remove(0);
-
-                        } catch (Error | Exception e) {
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!mHasTimingIdentifier) {
+                            return;
                         }
+
+                        if (mLuckyModelList.size() <= 0) {
+                            return;
+                        }
+
+                        String timingIdentifier = ((JSONObject) (param.args[2])).getString("timingIdentifier");
+                        if (TextUtils.isEmpty(timingIdentifier)) {
+                            return;
+                        }
+                        LuckyMoneyModel moneyModel = mLuckyModelList.get(0);
+
+                        Class luckyMoneyRequestClass = XposedHelpers.findClass(HookParams.getInstance().LuckyMoneyRequestClassName, lpparam.classLoader);
+                        Object luckyMoneyRequest = XposedHelpers.newInstance(luckyMoneyRequestClass,
+                                moneyModel.getMsgType(), moneyModel.getChannelId(), moneyModel.getSendId(), moneyModel.getNativeUrlString(), "", "", moneyModel.getTalker(), "v1.0", timingIdentifier);
+                        XposedHelpers.callMethod(mRequestCaller, HookParams.getInstance().RequestCallerMethod, luckyMoneyRequest, getDelayMillis());
+                        mLuckyModelList.remove(0);
                     }
                 });
 
         Class receiveUIParamNameClass = XposedHelpers.findClass(HookParams.getInstance().ReceiveUIParamNameClassName, lpparam.classLoader);
-        XposedHelpers.findAndHookMethod(HookParams.getInstance().LuckyMoneyReceiveUIClassName, lpparam.classLoader, HookParams.getInstance().ReceiveUIMethod, int.class, int.class, String.class, receiveUIParamNameClass, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                try {
-                    if (PreferencesUtils.quickOpen()) {
-                        Button button = (Button) findFirstFieldByExactType(param.thisObject.getClass(), Button.class).get(param.thisObject);
-                        if (button.isShown() && button.isClickable()) {
-                            button.performClick();
+        XposedHelpers.findAndHookMethod(HookParams.getInstance().LuckyMoneyReceiveUIClassName, lpparam.classLoader, HookParams.getInstance().ReceiveUIMethod,
+                int.class, int.class, String.class, receiveUIParamNameClass, new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        boolean isQuickOpen = SPManager.getInstance().isWechatRedPacketQuickOpen(true);
+                        if (isQuickOpen) {
+                            Button button = (Button) XposedHelpers.findFirstFieldByExactType(param.thisObject.getClass(), Button.class).get(param.thisObject);
+                            if (button.isShown() && button.isClickable()) {
+                                button.performClick();
+                            }
                         }
                     }
-                } catch (Error | Exception e) {
-                }
-            }
-        });
+                });
 
         String contactInfoUIClassName = "com.tencent.mm.plugin.profile.ui.ContactInfoUI";
         XposedHelpers.findAndHookMethod(contactInfoUIClassName, lpparam.classLoader, "onCreate", Bundle.class, new XC_MethodHook() {
@@ -148,41 +139,24 @@ public class RedPacketPlugin implements IPlugin {
         });
     }
 
-    private void handleLuckyMoney(ContentValues contentValues, XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (!PreferencesUtils.open()) {
+    private void handleLuckyMoney(ContentValues values, XC_LoadPackage.LoadPackageParam lpparam, WechatParamModel paramModel) throws Throwable {
+        boolean enable = SPManager.getInstance().isWechatRedPacketEnable(true);
+        int status = values.getAsInteger("status");
+        String talker = values.getAsString("talker"); // 可以用于判断黑名单
+        int isSend = values.getAsInteger("isSend"); // 发送者，0-自己
+
+        LogUtil.v("enable = " + enable + ", status = " + status + ", talker = " + talker + ", isSend = " + isSend);
+
+        boolean isInBlack = isInBlackList(talker); // 是否在，黑名单内
+        boolean isGroupTalk = talker.endsWith("@chatroom"); // 是否，是群聊
+        LogUtil.v("isInBlack =" + isInBlack + ", isGroupTalk = " + isGroupTalk);
+
+        // 未开启、红包过期、黑名单内不抢【群聊、私聊、自己发的也可以不抢】
+        if (!enable || 4 == status || isInBlack) {
             return;
         }
 
-        int status = contentValues.getAsInteger("status");
-        if (status == 4) {
-            return;
-        }
-
-        String talker = contentValues.getAsString("talker");
-
-        String blackList = PreferencesUtils.blackList();
-        if (!isEmpty(blackList)) {
-            for (String wechatId : blackList.split(",")) {
-                if (talker.equals(wechatId.trim())) {
-                    return;
-                }
-            }
-        }
-
-        int isSend = contentValues.getAsInteger("isSend");
-        if (PreferencesUtils.notSelf() && isSend != 0) {
-            return;
-        }
-
-        if (PreferencesUtils.notWhisper() && !isGroupTalk(talker)) {
-            return;
-        }
-
-        if (!isGroupTalk(talker) && isSend != 0) {
-            return;
-        }
-
-        String content = contentValues.getAsString("content");
+        String content = values.getAsString("content");
         if (!content.startsWith("<msg")) {
             content = content.substring(content.indexOf("<msg"));
         }
@@ -191,7 +165,7 @@ public class RedPacketPlugin implements IPlugin {
                 .getJSONObject("msg").getJSONObject("appmsg").getJSONObject("wcpayinfo");
         String senderTitle = wcpayinfo.getString("sendertitle");
         String notContainsWords = PreferencesUtils.notContains();
-        if (!isEmpty(notContainsWords)) {
+        if (!TextUtils.isEmpty(notContainsWords)) {
             for (String word : notContainsWords.split(",")) {
                 if (senderTitle.contains(word)) {
                     return;
@@ -206,27 +180,38 @@ public class RedPacketPlugin implements IPlugin {
         String sendId = nativeUrl.getQueryParameter("sendid");
 
         Class networkRequestClass = XposedHelpers.findClass(HookParams.getInstance().NetworkRequestClassName, lpparam.classLoader);
-        requestCaller = callStaticMethod(networkRequestClass, HookParams.getInstance().GetNetworkByModelMethod);
+        mRequestCaller = XposedHelpers.callStaticMethod(networkRequestClass, HookParams.getInstance().GetNetworkByModelMethod);
 
-
-        Class receiveLuckyMoneyRequestClass = XposedHelpers.findClass(HookParams.getInstance().ReceiveLuckyMoneyRequestClassName, lpparam.classLoader);
-        if (HookParams.getInstance().hasTimingIdentifier) {
-            callMethod(requestCaller, HookParams.getInstance().RequestCallerMethod, newInstance(receiveLuckyMoneyRequestClass, channelId, sendId, nativeUrlString, 0, "v1.0"), 0);
-            luckyMoneyMessages.add(new LuckyMoneyMessage(msgType, channelId, sendId, nativeUrlString, talker));
+        String receiveRequestClassName = paramModel.getRedPacketReceiveRequestClassName();
+        Class receiveLuckyMoneyRequestClass = XposedHelpers.findClass(receiveRequestClassName, lpparam.classLoader);
+        if (mHasTimingIdentifier) {
+            XposedHelpers.callMethod(mRequestCaller, HookParams.getInstance().RequestCallerMethod, XposedHelpers.newInstance(receiveLuckyMoneyRequestClass, channelId, sendId, nativeUrlString, 0, "v1.0"), 0);
+            mLuckyModelList.add(new LuckyMoneyModel(msgType, channelId, sendId, nativeUrlString, talker));
             return;
         }
 
         Class luckyMoneyRequestClass = XposedHelpers.findClass(HookParams.getInstance().LuckyMoneyRequestClassName, lpparam.classLoader);
-        Object luckyMoneyRequest = newInstance(luckyMoneyRequestClass,
+        Object luckyMoneyRequest = XposedHelpers.newInstance(luckyMoneyRequestClass,
                 msgType, channelId, sendId, nativeUrlString, "", "", talker, "v1.0");
 
-        callMethod(requestCaller, HookParams.getInstance().RequestCallerMethod, luckyMoneyRequest, getDelayTime());
+        XposedHelpers.callMethod(mRequestCaller, HookParams.getInstance().RequestCallerMethod, luckyMoneyRequest, getDelayMillis());
+    }
+
+    private boolean isInBlackList(String talker) {
+        List<String> blackList = Arrays.asList("1", "2", "3");
+        for (String blackStr : blackList) {
+            if (blackStr.equalsIgnoreCase(talker)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void handleTransfer(ContentValues contentValues, XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!PreferencesUtils.receiveTransfer()) {
             return;
         }
+
         JSONObject wcpayinfo = new XmlToJson.Builder(contentValues.getAsString("content")).build()
                 .getJSONObject("msg").getJSONObject("appmsg").getJSONObject("wcpayinfo");
 
@@ -239,32 +224,19 @@ public class RedPacketPlugin implements IPlugin {
         String transferId = wcpayinfo.getString("transferid");
         int invalidtime = wcpayinfo.getInt("invalidtime");
 
-        if (null == requestCaller) {
+        if (null == mRequestCaller) {
             Class networkRequestClass = XposedHelpers.findClass(HookParams.getInstance().NetworkRequestClassName, lpparam.classLoader);
-            requestCaller = callStaticMethod(networkRequestClass, HookParams.getInstance().GetNetworkByModelMethod);
+            mRequestCaller = XposedHelpers.callStaticMethod(networkRequestClass, HookParams.getInstance().GetNetworkByModelMethod);
         }
 
         String talker = contentValues.getAsString("talker");
 
         Class getTransferRequestClass = XposedHelpers.findClass(HookParams.getInstance().GetTransferRequestClassName, lpparam.classLoader);
-        callMethod(requestCaller, HookParams.getInstance().RequestCallerMethod, newInstance(getTransferRequestClass, transactionId, transferId, 0, "confirm", talker, invalidtime), 0);
+        XposedHelpers.callMethod(mRequestCaller, HookParams.getInstance().RequestCallerMethod, XposedHelpers.newInstance(getTransferRequestClass, transactionId, transferId, 0, "confirm", talker, invalidtime), 0);
     }
 
-    private int getDelayTime() {
-        int delayTime = 0;
-        if (PreferencesUtils.delay()) {
-            delayTime = getRandom(PreferencesUtils.delayMin(), PreferencesUtils.delayMax());
-        }
-        return delayTime;
-    }
-
-    private boolean isGroupTalk(String talker) {
-        return talker.endsWith("@chatroom");
-    }
-
-
-    private int getRandom(int min, int max) {
-        return min + (int) (Math.random() * (max - min + 1));
+    private int getDelayMillis() {
+        return 10;
     }
 
     private static class LuckyMoneyModel {
