@@ -7,8 +7,12 @@ import android.util.Log;
 import com.yline.utils.AppUtil;
 import com.yline.utils.LogUtil;
 import com.yline.xposed.module.wechat.CircleADPlugin;
+import com.yline.xposed.module.wechat.CircleWithDrawPlugin;
 import com.yline.xposed.module.wechat.DiceGamePlugin;
 import com.yline.xposed.module.wechat.MessageWithdrawPlugin;
+import com.yline.xposed.module.wechat.RedPacketPlugin;
+import com.yline.xposed.module.wechat.WindowAutoLogin;
+import com.yline.xposed.module.wechat.param.WechatParamManager;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
@@ -57,8 +61,11 @@ public class Main implements IXposedHookLoadPackage {
                     Context context = (Context) param.args[0];
                     String versionName = AppUtil.getVersionName(context);
                     LogUtil.v("versionName = " + versionName);
+
+                    WechatParamManager.init(lpparam);
                     finishAttach(lpparam, versionName,
-                            new DiceGamePlugin(), new MessageWithdrawPlugin(), new CircleADPlugin());
+                            new DiceGamePlugin(), new MessageWithdrawPlugin(), new CircleADPlugin(),
+                            new CircleWithDrawPlugin(), new WindowAutoLogin(), new RedPacketPlugin());
                 }
             });
         }

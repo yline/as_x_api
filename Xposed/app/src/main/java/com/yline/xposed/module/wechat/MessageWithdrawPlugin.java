@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.yline.utils.LogUtil;
 import com.yline.xposed.IPlugin;
 import com.yline.xposed.config.SPManager;
+import com.yline.xposed.utils.VersionUtil;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -34,8 +35,10 @@ public class MessageWithdrawPlugin implements IPlugin {
 
     @Override
     public void hook(XC_LoadPackage.LoadPackageParam lpparam, String versionName) throws Throwable {
+        final String dbClassName = VersionUtil.getDatabaseClassName(versionName);
+
         // updateWithOnConflict
-        Class clazz = XposedHelpers.findClass("com.tencent.wcdb.database.SQLiteDatabase", lpparam.classLoader);
+        Class clazz = XposedHelpers.findClass(dbClassName, lpparam.classLoader);
         XposedHelpers.findAndHookMethod(clazz, "updateWithOnConflict",
                 String.class, ContentValues.class, String.class, String[].class, int.class, new XC_MethodHook() {
                     @Override
