@@ -92,6 +92,14 @@ public class SPManager {
         return (boolean) get(Key.WECHAT_RED_PACKET_ENABLE, enable);
     }
 
+    public void setWechatRedPacketTransfer(boolean enable) {
+        put(Key.WECHAT_RED_PACKET_TRANSFER, enable);
+    }
+
+    public boolean isWechatRedPacketTransfer(boolean enable) {
+        return (boolean) get(Key.WECHAT_RED_PACKET_TRANSFER, enable);
+    }
+
     private static class Key {
         private static final String WECHAT_FINGER_GUESS = "wechat_finger_guess"; // 微信猜拳
         private static final String WECHAT_DICE_GAME = "wechat_dice_game"; // 微信骰子点数
@@ -107,6 +115,7 @@ public class SPManager {
         private static final String WECHAT_RED_PACKET_ENABLE = "wechat_red_packet_enable"; // 微信，抢红包，开启与否
         private static final String WECHAT_RED_PACKET_QUICK_OPEN = "wechat_red_packet_quick_open"; // 微信，抢红包，快速打开
         private static final String WECHAT_RED_PACKET_SHOW_ID = "wechat_red_packet_show_id"; // 微信，抢完红包，copy Wechat ID
+        private static final String WECHAT_RED_PACKET_TRANSFER = "wechat_red_packet_transfer"; // 微信，转账，自动接收
     }
 
     private static void put(String key, Object value) {

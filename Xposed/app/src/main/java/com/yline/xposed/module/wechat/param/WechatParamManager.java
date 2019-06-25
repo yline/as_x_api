@@ -66,6 +66,7 @@ public class WechatParamManager {
 
         // RedPacketPlugin
         try {
+            // 设置参数
             Class receiveRequestClass = ReflectionUtil.findClassesFromPackage(classLoader, wechatClassList, "com.tencent.mm.plugin.luckymoney", 1)
                     .filterByField("msgType", "int")
                     .filterByMethod(void.class, int.class, String.class, JSONObject.class)
@@ -73,10 +74,21 @@ public class WechatParamManager {
             String receiveRequestClassName = receiveRequestClass.getName();
             String receiveRequestMethodName = ReflectionUtil.findMethodsByExactParameters(receiveRequestClass, void.class, int.class, String.class, JSONObject.class).getName();
 
-            // 设置参数
             paramModel.setRedPacketReceiveRequestClassName(receiveRequestClassName);
             paramModel.setRedPacketReceiveRequestMethodName(receiveRequestMethodName);
 
+            // 设置参数
+            Class requestClass = ReflectionUtil.findClassesFromPackage(classLoader, wechatClassList, "com.tencent.mm.plugin.luckymoney", 1)
+                    .filterByField("talker", "java.lang.String")
+                    .filterByMethod(void.class, int.class, String.class, JSONObject.class)
+                    .filterByMethod(int.class, "getType")
+                    .filterByNoMethod(boolean.class)
+                    .firstOrNull();
+            String requestClassName = requestClass.getName();
+
+            paramModel.setRedPacketRequestClassName(requestClassName);
+
+            // 设置参数
             Class receiveUIParamNameClass = ReflectionUtil.findClassesFromPackage(classLoader, wechatClassList, "com.tencent.mm", 1)
                     .filterByMethod(String.class, "getInfo")
                     .filterByMethod(int.class, "getType")
@@ -84,9 +96,39 @@ public class WechatParamManager {
                     .firstOrNull();
             String receiveUIParamNameClassName = receiveUIParamNameClass.getName();
 
-            // 设置参数
             paramModel.setRedPacketReceiveUIParamClassName(receiveUIParamNameClassName);
 
+            // 设置参数
+            Class transferClass = ReflectionUtil.findClassesFromPackage(classLoader, wechatClassList, "com.tencent.mm.plugin.remittance", 1)
+                    .filterByField("java.lang.String")
+                    .filterByNoField("int")
+                    .filterByMethod(void.class, int.class, String.class, JSONObject.class)
+                    .filterByMethod(String.class, "getUri")
+                    .firstOrNull();
+            String transferClassName = transferClass.getName();
+
+            paramModel.setRedPacketTransferClassName(transferClassName);
+
+            // 设置参数
+            Class requestCallerClass = ReflectionUtil.findClassesFromPackage(classLoader, wechatClassList, "com.tencent.mm", 1)
+                    .filterByField("foreground", "boolean")
+                    .filterByMethod(void.class, int.class, String.class, int.class, boolean.class)
+                    .filterByMethod(void.class, "cancel", int.class)
+                    .filterByMethod(void.class, "reset")
+                    .firstOrNull();
+            String requestCallerMethodName = ReflectionUtil.findMethodsByExactParameters(requestCallerClass, void.class, requestCallerClass, int.class).getName();
+
+            paramModel.setRedPacketCallerMethodName(requestCallerMethodName);
+
+            Class networkRequestClass = ReflectionUtil.findClassesFromPackage(classLoader, wechatClassList, "com.tencent.mm", 1)
+                    .filterByMethod(void.class, "unhold")
+                    .filterByMethod(requestCallerClass)
+                    .firstOrNull();
+            String networkRequestClassName = networkRequestClass.getName();
+            String networkRequestMethodName = ReflectionUtil.findMethodsByExactParameters(networkRequestClass, requestCallerClass).getName();
+
+            paramModel.setRedPacketNetRequestClassName(networkRequestClassName);
+            paramModel.setRedPacketNetRequestMethodName(networkRequestMethodName);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }

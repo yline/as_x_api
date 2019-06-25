@@ -29,7 +29,54 @@ public class WechatParamModel implements Serializable {
     private String redPacketReceiveRequestClassName;
     private String redPacketReceiveRequestMethodName;
 
+    private String redPacketRequestClassName;
     private String redPacketReceiveUIParamClassName;
+
+    private String redPacketTransferClassName;
+
+    private String redPacketNetRequestClassName;
+    private String redPacketNetRequestMethodName;
+    private String redPacketCallerMethodName;
+
+    public String getRedPacketCallerMethodName() {
+        return redPacketCallerMethodName;
+    }
+
+    public void setRedPacketCallerMethodName(String redPacketCallerMethodName) {
+        this.redPacketCallerMethodName = redPacketCallerMethodName;
+    }
+
+    public String getRedPacketNetRequestClassName() {
+        return redPacketNetRequestClassName;
+    }
+
+    public void setRedPacketNetRequestClassName(String redPacketNetRequestClassName) {
+        this.redPacketNetRequestClassName = redPacketNetRequestClassName;
+    }
+
+    public String getRedPacketNetRequestMethodName() {
+        return redPacketNetRequestMethodName;
+    }
+
+    public void setRedPacketNetRequestMethodName(String redPacketNetRequestMethodName) {
+        this.redPacketNetRequestMethodName = redPacketNetRequestMethodName;
+    }
+
+    public String getRedPacketRequestClassName() {
+        return redPacketRequestClassName;
+    }
+
+    public void setRedPacketRequestClassName(String redPacketRequestClassName) {
+        this.redPacketRequestClassName = redPacketRequestClassName;
+    }
+
+    public String getRedPacketTransferClassName() {
+        return redPacketTransferClassName;
+    }
+
+    public void setRedPacketTransferClassName(String redPacketTransferClassName) {
+        this.redPacketTransferClassName = redPacketTransferClassName;
+    }
 
     public String getRedPacketReceiveUIParamClassName() {
         return redPacketReceiveUIParamClassName;
