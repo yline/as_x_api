@@ -13,6 +13,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 /**
  * 朋友圈去广告
+ * WechatEnhancement - ADBlock
  *
  * @author yline 2019/6/21 -- 17:22
  */

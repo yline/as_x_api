@@ -12,6 +12,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 /**
  * 修改，腾讯定位
+ * XposedWechatHelper - TencentLocationManagerHook
  *
  * @author yline 2019/6/26 -- 11:19
  */

@@ -14,8 +14,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 /**
  * 猜拳、骰子游戏，随意指定点数
- * 参考：XposedWechatHelper
- * todo test
+ * XposedWechatHelper - EmojiGameHook
  *
  * @author yline 2019/6/21 -- 11:38
  */

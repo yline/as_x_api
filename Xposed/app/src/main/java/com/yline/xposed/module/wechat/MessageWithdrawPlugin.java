@@ -22,7 +22,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 /**
  * 消息防测回
- * 参考：XposedWechatHelper
+ * XposedWechatHelper - RevokeMsgHook
  *
  * @author yline 2019/6/21 -- 16:06
  */

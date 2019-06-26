@@ -17,6 +17,7 @@ import static java.util.Arrays.copyOfRange;
 
 /**
  * 朋友圈，防删除
+ * WechatEnhancement - AntiSnsDelete
  *
  * @author yline 2019/6/24 -- 11:18
  */

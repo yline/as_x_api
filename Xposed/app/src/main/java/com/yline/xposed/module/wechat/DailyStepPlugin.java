@@ -10,6 +10,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 /**
  * 每日，运动步数
+ * XposedWechatHelper - StepHook
  *
  * @author yline 2019/6/26 -- 10:50
  */

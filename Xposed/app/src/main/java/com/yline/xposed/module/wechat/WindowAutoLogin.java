@@ -15,6 +15,8 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 /**
  * 微信，电脑端，自动登录【比较危险，因为任意人员只要有你的微信，都能登录】
+ * WechatEnhancement - AutoLogin
+ * XposedWechatHelper - ExtDeviceWXLoginUIHook
  *
  * @author yline 2019/6/24 -- 11:34
  */

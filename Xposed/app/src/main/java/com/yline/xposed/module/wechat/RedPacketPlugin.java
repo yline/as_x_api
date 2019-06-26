@@ -30,6 +30,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 /**
  * 抢红包
+ * WechatEnhancement - LockMoney
  *
  * @author yline 2019/6/24 -- 12:37
  */
