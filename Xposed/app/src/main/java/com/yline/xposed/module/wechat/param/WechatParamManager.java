@@ -1,6 +1,10 @@
 package com.yline.xposed.module.wechat.param;
 
+import android.text.TextUtils;
+
+import com.alibaba.fastjson.JSON;
 import com.yline.utils.LogUtil;
+import com.yline.xposed.config.SPManager;
 import com.yline.xposed.utils.ReflectionUtil;
 
 import net.dongliu.apk.parser.ApkFile;
@@ -24,20 +28,28 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 public class WechatParamManager {
 
 
-    public static void init(XC_LoadPackage.LoadPackageParam lpparam) {
+    public static void init(XC_LoadPackage.LoadPackageParam lpparam, String versionName) {
+        boolean loadSuccess = loadParam(versionName);
         WechatParamModel paramModel = WechatParamModel.getInstance();
-
-        boolean loadSuccess = loadParam();
         LogUtil.v("loadSuccess = " + loadSuccess);
 
         if (!loadSuccess) {
             findParam(lpparam, paramModel);
-            saveParam();
+            saveParam(paramModel, versionName);
         }
     }
 
-    private static boolean loadParam() {
-        return false;
+    private static boolean loadParam(String versionName) {
+        String paramString = SPManager.getInstance().getParamModel();
+        WechatParamModel paramModel = JSON.parseObject(paramString, WechatParamModel.class);
+
+        String oldVersionName = null == paramModel ? null : paramModel.getVersionName();
+        if (versionName.equals(oldVersionName)) {
+            WechatParamModel.setParamModel(paramModel);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private static void findParam(XC_LoadPackage.LoadPackageParam lpparam, WechatParamModel paramModel) {
@@ -164,8 +176,12 @@ public class WechatParamManager {
         return str.substring(1, str.length() - 1);
     }
 
+    private static void saveParam(WechatParamModel paramModel, String versionName) {
+        // 版本号
+        paramModel.setVersionName(versionName);
 
-    private static void saveParam() {
-
+        // 放入内容
+        String paramString = JSON.toJSONString(paramModel);
+        SPManager.getInstance().setParamModel(paramString);
     }
 }

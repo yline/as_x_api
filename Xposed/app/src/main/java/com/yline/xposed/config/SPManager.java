@@ -20,6 +20,14 @@ public class SPManager {
         return sInstance;
     }
 
+    public void setParamModel(String paramContent) {
+        put(Key.WECHAT_PARAM_MODEL, paramContent);
+    }
+
+    public String getParamModel() {
+        return (String) get(Key.WECHAT_PARAM_MODEL, "");
+    }
+
     public int getWechatFingerGuess(int defaultValue) {
         return (int) get(Key.WECHAT_FINGER_GUESS, defaultValue);
     }
@@ -100,7 +108,25 @@ public class SPManager {
         return (boolean) get(Key.WECHAT_RED_PACKET_TRANSFER, enable);
     }
 
+    public void setWechatDailyStepNum(int step) {
+        put(Key.WECHAT_DAILY_STEP_NUM, step);
+    }
+
+    public int getWechatDailyStepNum(int step) {
+        return (int) get(Key.WECHAT_DAILY_STEP_NUM, step);
+    }
+
+    public void setWechatLocation(boolean enable) {
+        put(Key.WECHAT_LOCATION, enable);
+    }
+
+    public boolean isWechatLocation(boolean enable) {
+        return (boolean) get(Key.WECHAT_LOCATION, enable);
+    }
+
     private static class Key {
+        private static final String WECHAT_PARAM_MODEL = "wechat_param_model"; // 微信，分析得到的参数
+
         private static final String WECHAT_FINGER_GUESS = "wechat_finger_guess"; // 微信猜拳
         private static final String WECHAT_DICE_GAME = "wechat_dice_game"; // 微信骰子点数
 
@@ -116,6 +142,10 @@ public class SPManager {
         private static final String WECHAT_RED_PACKET_QUICK_OPEN = "wechat_red_packet_quick_open"; // 微信，抢红包，快速打开
         private static final String WECHAT_RED_PACKET_SHOW_ID = "wechat_red_packet_show_id"; // 微信，抢完红包，copy Wechat ID
         private static final String WECHAT_RED_PACKET_TRANSFER = "wechat_red_packet_transfer"; // 微信，转账，自动接收
+
+        private static final String WECHAT_DAILY_STEP_NUM = "wechat_daily_step_num"; // 微信，每日运动步数
+
+        private static final String WECHAT_LOCATION = "wechat_location"; // 腾讯定位
     }
 
     private static void put(String key, Object value) {

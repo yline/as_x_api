@@ -1,5 +1,6 @@
 package com.yline.xposed;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.util.Log;
@@ -8,7 +9,9 @@ import com.yline.utils.AppUtil;
 import com.yline.utils.LogUtil;
 import com.yline.xposed.module.wechat.CircleADPlugin;
 import com.yline.xposed.module.wechat.CircleWithDrawPlugin;
+import com.yline.xposed.module.wechat.DailyStepPlugin;
 import com.yline.xposed.module.wechat.DiceGamePlugin;
+import com.yline.xposed.module.wechat.LocationPlugin;
 import com.yline.xposed.module.wechat.MessageWithdrawPlugin;
 import com.yline.xposed.module.wechat.RedPacketPlugin;
 import com.yline.xposed.module.wechat.WindowAutoLogin;
@@ -62,10 +65,23 @@ public class Main implements IXposedHookLoadPackage {
                     String versionName = AppUtil.getVersionName(context);
                     LogUtil.v("versionName = " + versionName);
 
-                    WechatParamManager.init(lpparam);
+                    WechatParamManager.init(lpparam, versionName);
                     finishAttach(lpparam, versionName,
                             new DiceGamePlugin(), new MessageWithdrawPlugin(), new CircleADPlugin(),
-                            new CircleWithDrawPlugin(), new WindowAutoLogin(), new RedPacketPlugin());
+                            new CircleWithDrawPlugin(), new WindowAutoLogin(), new RedPacketPlugin(),
+                            new LocationPlugin());
+                }
+            });
+
+            XposedHelpers.findAndHookMethod(Application.class, "attach", Context.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(XC_MethodHook.MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+
+                    Context context = (Context) param.args[0];
+                    String versionName = AppUtil.getVersionName(context);
+                    finishAttach(lpparam, versionName,
+                            new DailyStepPlugin());
                 }
             });
         }

@@ -21,6 +21,12 @@ public class WechatParamModel implements Serializable {
         return sInstance;
     }
 
+    public static void setParamModel(WechatParamModel paramModel) {
+        sInstance = paramModel;
+    }
+
+    private String versionName;
+
     // 朋友圈广告
     private String circleAdClassName;
     private String circleAdMethodName;
@@ -37,6 +43,14 @@ public class WechatParamModel implements Serializable {
     private String redPacketNetRequestClassName;
     private String redPacketNetRequestMethodName;
     private String redPacketCallerMethodName;
+
+    public String getVersionName() {
+        return versionName;
+    }
+
+    public void setVersionName(String versionName) {
+        this.versionName = versionName;
+    }
 
     public String getRedPacketCallerMethodName() {
         return redPacketCallerMethodName;

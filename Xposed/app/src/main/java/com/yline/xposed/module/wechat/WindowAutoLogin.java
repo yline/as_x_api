@@ -42,5 +42,26 @@ public class WindowAutoLogin implements IPlugin {
                 }
             }
         });
+
+        // XposedWechatHelper
+        /*
+        final Class extDeviceWXLoginUIHookClazz = XposedHelpers.findClass("com.tencent.mm.plugin.webwx.ui.ExtDeviceWXLoginUI", classLoader);
+        XposedHelpers.findAndHookMethod(extDeviceWXLoginUIHookClazz, "initView",
+                new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        Object object = param.thisObject;
+                        Field[] fields = extDeviceWXLoginUIHookClazz.getDeclaredFields();
+                        for (Field field : fields) {
+                            Object objectField = XposedHelpers.getObjectField(object, field.getName());
+                            if (objectField instanceof Button && ((Button) objectField).getText().toString().equals("登录")) {
+                                ((Button) objectField).performClick();
+                                break;
+                            }
+                        }
+                        super.afterHookedMethod(param);
+                    }
+                });
+        */
     }
 }
